@@ -4,7 +4,7 @@ use App::Cmd::Setup -app;
 
 our $VERSION = '0.01';
 
-sub default_command { "search" }
+#sub default_command { "search" }
 
 1;
 

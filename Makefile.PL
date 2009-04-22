@@ -7,6 +7,8 @@ license  'perl';
 
 build_requires 'Test::More';
 
+#repository 'git://github.com/renormalist/app-dpath.git';
+
 auto_install;
 
 WriteAll;
