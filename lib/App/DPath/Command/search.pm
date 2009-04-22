@@ -22,7 +22,6 @@ sub read_in {
         my ($self, $opt, $args, $file) = @_;
 
         my $intype  = $opt->{intype}  || 'yaml';
-        print STDERR "intype: $intype\n";
         my $data;
         my $filecontent;
         {
@@ -53,11 +52,7 @@ sub read_in {
 
 sub match {
         my ($self, $opt, $args, $data, $path) = @_;
-        print "path: $path\n";
-        require Data::Dumper;
-        print "data: ".Data::Dumper::Dumper($data);
         my @resultlist = dpath($path)->match($data);
-        print Data::Dumper::Dumper(\@resultlist);
         return \@resultlist;
 }
 
@@ -65,7 +60,6 @@ sub write_out {
     my ($self, $opt, $args, $resultlist) = @_;
 
     my $outtype = $opt->{outtype} || 'yaml';
-    print STDERR "outtype: $outtype\n";
     if ($outtype eq "yaml") {
             require YAML::Syck;
             print YAML::Syck::Dump($resultlist);
@@ -81,9 +75,6 @@ sub write_out {
 
 sub run {
         my ($self, $opt, $args) = @_;
-
-#        print Data::Dumper::Dumper($opt);
-#        print Data::Dumper::Dumper($args);
 
         my $path    = $args->[0];
         my $file    = $args->[1] || '-';
