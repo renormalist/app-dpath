@@ -9,8 +9,8 @@ use Data::DPath 'dpath';
 
 sub opt_spec {
         return (
-                [ "intype|i=s",   "input format, [yaml(default), dumper, tap]"  ],
-                [ "outtype|o=s",  "output format, [yaml(default), dumper]" ],
+                [ "intype|i=s",   "input format, [yaml(default), json, dumper, tap]"  ],
+                [ "outtype|o=s",  "output format, [yaml(default), json, dumper]" ],
                );
 }
 
@@ -41,6 +41,10 @@ sub read_in {
                 require YAML::Syck;
                 $data = YAML::Syck::Load($filecontent);
         }
+        elsif ($intype eq "json") {
+                require JSON::Syck;
+                $data = JSON::Syck::Load($filecontent);
+        }
         elsif ($intype eq "dumper") {
                 eval '$data = my '.$filecontent;
         }
@@ -66,10 +70,19 @@ sub write_out {
     my ($self, $opt, $args, $resultlist) = @_;
 
     my $outtype = $opt->{outtype} || 'yaml';
-    if ($outtype eq "yaml") {
+    if ($outtype eq "yaml")
+    {
             require YAML::Syck;
             print YAML::Syck::Dump($resultlist);
-    } elsif ($outtype eq "dumper") {
+    }
+    elsif ($outtype eq "json")
+    {
+            no warnings 'once';
+            require JSON::Syck;
+            print JSON::Syck::Dump($resultlist);
+    }
+    elsif ($outtype eq "dumper")
+    {
             require Data::Dumper;
             print Data::Dumper::Dumper($resultlist);
     }
