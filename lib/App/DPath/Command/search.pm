@@ -9,7 +9,7 @@ use Data::DPath 'dpath';
 
 sub opt_spec {
         return (
-                [ "intype|i=s",   "input format, [yaml(default), dumper]"  ],
+                [ "intype|i=s",   "input format, [yaml(default), dumper, tap]"  ],
                 [ "outtype|o=s",  "output format, [yaml(default), dumper]" ],
                );
 }
@@ -22,6 +22,7 @@ sub read_in {
         my ($self, $opt, $args, $file) = @_;
 
         my $intype  = $opt->{intype}  || 'yaml';
+        #print STDERR "intype: $intype\n";
         my $data;
         my $filecontent;
         {
@@ -42,6 +43,11 @@ sub read_in {
         }
         elsif ($intype eq "dumper") {
                 eval '$data = my '.$filecontent;
+        }
+        elsif ($intype eq "tap") {
+                require TAP::DOM;
+                #print STDERR "filecontent: $filecontent\n";
+                $data = new TAP::DOM( tap => $filecontent );
         }
         else
         {
@@ -79,17 +85,16 @@ sub run {
         my $path    = $args->[0];
         my $file    = $args->[1] || '-';
 
-        write_out( $self,
-                   $opt,
-                   $args,
-                   match($self,
-                         $opt,
-                         $args,
-                         read_in( $self,
-                                  $opt,
-                                  $args,
-                                  $file ),
-                         $path ));
+        #print STDERR "path: $path\n";
+        #print STDERR "file: $file\n";
+
+        my $data   = $self->read_in( $opt, $args, $file );
+        #print STDERR "data: ".Dumper($data);
+        my $result = $self->match(   $opt, $args, $data, $path );
+
+        use Data::Dumper;
+        #print STDERR "result: ".Dumper($result);
+        $self->write_out( $opt, $args, $result );
 }
 
 # $ yourcmd blort --recheck
