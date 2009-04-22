@@ -2,6 +2,7 @@ package App::DPath;
 
 use App::Cmd::Setup -app;
 
+use 5.010; # Data::DPath requires it anyway
 our $VERSION = '0.01';
 
 #sub default_command { "search" }

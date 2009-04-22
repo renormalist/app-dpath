@@ -7,7 +7,10 @@ license  'perl';
 
 build_requires 'Test::More';
 
-#repository 'git://github.com/renormalist/app-dpath.git';
+requires 'YAML::Syck';
+requires 'Data::DPath';
+requires 'App::Cmd';
+repository 'git://github.com/renormalist/app-dpath.git';
 
 auto_install;
 
