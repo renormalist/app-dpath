@@ -42,8 +42,8 @@ sub read_in {
                 $data = YAML::Syck::Load($filecontent);
         }
         elsif ($intype eq "json") {
-                require JSON::Syck;
-                $data = JSON::Syck::Load($filecontent);
+                require JSON;
+                $data = JSON::decode_json($filecontent, { allow_blessed => 1 });
         }
         elsif ($intype eq "dumper") {
                 eval '$data = my '.$filecontent;
@@ -77,9 +77,9 @@ sub write_out {
     }
     elsif ($outtype eq "json")
     {
-            no warnings 'once';
-            require JSON::Syck;
-            print JSON::Syck::Dump($resultlist);
+            eval "use JSON -convert_blessed_universally";
+            my $json = JSON->new->allow_nonref->pretty->allow_blessed->convert_blessed;
+            print $json->encode($resultlist);
     }
     elsif ($outtype eq "dumper")
     {
