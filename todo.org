@@ -1,0 +1,4 @@
+Idea collection
+
+* INI files
+* XML::Simple
