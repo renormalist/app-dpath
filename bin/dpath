@@ -2,7 +2,7 @@
 
 BEGIN {
         my $default_cmd = "search";
-        unshift @ARGV, $default_cmd unless $ARGV[0] eq $default_cmd;
+        unshift @ARGV, $default_cmd unless $ARGV[0] =~ /search|help|commands/;
 }
 
 use App::DPath -run;
