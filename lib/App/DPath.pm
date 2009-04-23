@@ -12,7 +12,7 @@ our $VERSION = '0.01';
 
 =head1 NAME
 
-App::DPath - Tool "dpath" for Data::DPath
+App::DPath - Cmdline tool to filter files with Data::DPath
 
 =head1 VERSION
 

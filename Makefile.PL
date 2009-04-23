@@ -8,6 +8,8 @@ license  'perl';
 build_requires 'Test::More';
 
 requires 'YAML::Syck';
+requires 'JSON';
+requires 'TAP::DOM';
 requires 'Data::DPath';
 requires 'App::Cmd';
 repository 'git://github.com/renormalist/app-dpath.git';
