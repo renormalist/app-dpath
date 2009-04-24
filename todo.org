@@ -1,4 +1,5 @@
 Idea collection
 
-* INI files
-* XML::Simple
+* types
+*** INI files
+*** XML::Simple

@@ -3,9 +3,10 @@ package App::DPath;
 use App::Cmd::Setup -app;
 
 use 5.010; # Data::DPath requires it anyway
-our $VERSION = '0.01';
+use strict;
+use warnings;
 
-#sub default_command { "search" }
+our $VERSION = '0.01';
 
 1;
 
@@ -22,17 +23,66 @@ Version 0.01
 
 =head1 SYNOPSIS
 
-  $ dpath --in=/etc/interesting/cfg.yml '//some[2]/hash/key'
+Query a yaml input file to STDOUT as yaml output:
 
-=head1 FUNCTIONS
+  $ dpath '//some/dpath' data.yaml
 
-This module is meant to be used as cmdline tool. The functions are
-described here mostly to keep Pod::Coverage happy.
+Use it as filter:
 
-=head2 default_command
+  $ cat data.yaml | dpath '//some/dpath' > result.yaml
+  $ dpath '//some/dpath' < data.yaml > result.yaml
 
-This overwrites the default command to our primary subcommand
-C<search>.
+Specify other input and output formats:
+
+Output is JSON:
+
+  $ dpath -o json '//some/dpath' data.yaml
+
+Input is JSON:
+
+  $ dpath -i json '//some/dpath' data.json
+
+Input is TAP:
+
+  $ dpath -i tap '//some/dpath' data.tap
+  $ perl t/some_test.t | dpath -i tap '//tests_planned'
+
+Input is JSON, Output is Data::Dumper:
+
+  $ dpath -i json -o dumper '//some/dpath' data.json
+
+Connect several steps:
+
+  $ cat data.yaml | dpath           '//path1' | dpath           '//path2' | dpath '//path3'
+  $ cat data.yaml | dpath  -o dumper'//path1' | dpath -i dumper '//path2' | dpath '//path3'
+
+
+=head1 ABOUT
+
+This module is a cmdline tool around Data::DPath.
+
+You can specify a DPath and query it against input files or STDIN.
+
+Several input and output types are allowed.
+Default is C<YAML> as input and output.
+
+The following input types are allowed, with their according modules
+used to convert the input into a data structure:
+
+ yaml   - YAML::Syck
+ dumper - Data::Dumper (including the leading $VAR1 =)
+ json   - JSON
+ tap    - TAP::DOM
+
+The following output types are allowed:
+
+ yaml   - YAML::Syck
+ dumper - Data::Dumper
+ json   - JSON
+
+For more information about the DPath syntax, please see
+L<Data::DPath|Data::DPath>.
+
 
 =head1 AUTHOR
 
