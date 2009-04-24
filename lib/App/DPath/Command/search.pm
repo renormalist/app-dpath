@@ -120,8 +120,20 @@ App::DPath::Command::search - The "search" subcommand.
 
 =head1 FUNCTIONS
 
-This module is meant to be used as cmdline tool. The functions are
-described here mostly to keep Pod::Coverage happy.
+This is not an end user module but used as cmdline tool. The functions
+here are only named to keep Pod::Coverage happy.
+
+=head2 read_in
+
+Reads in a file and converts it according to format.
+
+=head2 match
+
+Does the match against the given dpath.
+
+=head2 write_out
+
+Writes out the result set according to format.
 
 =head2 opt_spec
 
