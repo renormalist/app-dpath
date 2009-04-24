@@ -15,10 +15,10 @@ sub check {
 
         my $path      = '//lines//description[ value =~ m(use Data::DPath) ]/../_children//data//name[ value eq "Hash two"]/../value';
         my $program   = "$^X -Ilib bin/dpath";
-        my $unblessed = $intype eq "json" ? "_unblessed" : "";
+        my $unblessed = $outtype eq "json" ? "_unblessed" : "";
         my $infile    = "t/some_tap$unblessed.$intype";
         my $cmd       = "$program -i $intype -o $outtype '$path' $infile";
-        diag $cmd;
+        #diag $cmd;
         my $output    = `$cmd`;
 
         my $result;

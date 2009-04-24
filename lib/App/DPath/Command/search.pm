@@ -43,7 +43,7 @@ sub read_in {
         }
         elsif ($intype eq "json") {
                 require JSON;
-                $data = JSON::decode_json($filecontent, { allow_blessed => 1 });
+                $data = JSON::decode_json($filecontent);
         }
         elsif ($intype eq "dumper") {
                 eval '$data = my '.$filecontent;
