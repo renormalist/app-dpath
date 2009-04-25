@@ -1,9 +1,6 @@
 NAME
     App::DPath - Cmdline tool around Data::DPath
 
-VERSION
-    Version 0.01
-
 SYNOPSIS
     This module provides a cmdline tool around Data::DPath.
 
@@ -66,7 +63,7 @@ ABOUT
      ini    - Config::INI::Writer
      dumper - Data::Dumper (including the leading $VAR1 variable assignment)
 
-    For more information about the DPath syntax, please see Data::DPath.
+    For more information about the DPath syntax, see Data::DPath.
 
 AUTHOR
     Steffen Schwigon, "<<ss5 at renormalist.net>>"

@@ -15,12 +15,6 @@ our $VERSION = '0.01';
 
 App::DPath - Cmdline tool around Data::DPath
 
-=head1 VERSION
-
-Version 0.01
-
-=cut
-
 =head1 SYNOPSIS
 
 This module provides a cmdline tool around Data::DPath.
@@ -85,7 +79,7 @@ The following B<output types> are allowed:
  ini    - Config::INI::Writer
  dumper - Data::Dumper (including the leading $VAR1 variable assignment)
 
-For more information about the DPath syntax, please see
+For more information about the DPath syntax, see
 L<Data::DPath|Data::DPath>.
 
 
