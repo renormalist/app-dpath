@@ -23,6 +23,8 @@ Version 0.01
 
 =head1 SYNOPSIS
 
+This module provides a cmdline tool around Data::DPath.
+
 Query a yaml input file to STDOUT as yaml output:
 
   $ dpath '//some/dpath' data.yaml
@@ -58,25 +60,9 @@ Input is JSON, Output is Data::Dumper:
 
   $ dpath -i json -o dumper '//some/dpath' data.json
 
-=head1 CHEATING
-
-The C<dpath> tool is based on L<App::Cmd> which is using sub
-commands. All the above examples use the default subcommand C<search>
-which is silently inserted into the argument/options list.
-
-So instead of
-
-  $ dpath -i json -o dumper data.json
-
-you can also write
-
-  $ dpath search -i json -o dumper data.json
-
-Other available subcommands are C<help> and C<commands>.
-
 =head1 ABOUT
 
-This module provides a cmdline tool around Data::DPath.
+A cmdline tool around Data::DPath.
 
 You can specify a DPath to query input files or STDIN.
 
@@ -101,6 +87,26 @@ The following B<output types> are allowed:
 
 For more information about the DPath syntax, please see
 L<Data::DPath|Data::DPath>.
+
+
+=head1 DEFAULT COMMAND CHEATING
+
+The C<dpath> tool is based on L<App::Cmd> which is using sub
+commands. All the above examples use the default subcommand C<search>
+which is silently inserted into the argument/options list if no
+subcommand is given.
+
+So instead of
+
+  $ dpath -i json -o dumper data.json
+
+you can also write
+
+  $ dpath search -i json -o dumper data.json
+
+Other available subcommands are C<help> and C<commands>.
+
+The built in help always fully refers to subcommands.
 
 
 =head1 AUTHOR

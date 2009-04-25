@@ -5,6 +5,8 @@ VERSION
     Version 0.01
 
 SYNOPSIS
+    This module provides a cmdline tool around Data::DPath.
+
     Query a yaml input file to STDOUT as yaml output:
 
       $ dpath '//some/dpath' data.yaml
@@ -41,7 +43,7 @@ SYNOPSIS
       $ dpath -i json -o dumper '//some/dpath' data.json
 
 ABOUT
-    This module provides a cmdline tool around Data::DPath.
+    A cmdline tool around Data::DPath.
 
     You can specify a DPath to query input files or STDIN.
 
@@ -69,35 +71,10 @@ ABOUT
 AUTHOR
     Steffen Schwigon, "<<ss5 at renormalist.net>>"
 
-BUGS
-    Please report any bugs or feature requests to "bug-app-dpath at
-    rt.cpan.org", or through the web interface at
-    <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=App-DPath>. I will be
-    notified, and then you'll automatically be notified of progress on your
-    bug as I make changes.
+REPOSITORY
+    The public repository is hosted on github:
 
-SUPPORT
-    You can find documentation for this module with the perldoc command.
-
-        perldoc App::DPath
-
-    You can also look for information at:
-
-    *   RT: CPAN's request tracker
-
-        <http://rt.cpan.org/NoAuth/Bugs.html?Dist=App-DPath>
-
-    *   AnnoCPAN: Annotated CPAN documentation
-
-        <http://annocpan.org/dist/App-DPath>
-
-    *   CPAN Ratings
-
-        <http://cpanratings.perl.org/d/App-DPath>
-
-    *   Search CPAN
-
-        <http://search.cpan.org/dist/App-DPath/>
+      git clone git://github.com/renormalist/app-dpath.git
 
 COPYRIGHT & LICENSE
     Copyright 2009 Steffen Schwigon, all rights reserved.

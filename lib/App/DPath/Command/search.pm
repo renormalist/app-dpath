@@ -129,7 +129,7 @@ sub run {
 
 =head1 NAME
 
-App::DPath::Command::search - The "search" subcommand (default).
+App::DPath::Command::search - The default subcommand to search by dpath, can be omitted
 
 =head1 FUNCTIONS
 
