@@ -18,7 +18,7 @@ sub check {
 
         $path       ||= '//lines//description[ value =~ m(use Data::DPath) ]/../_children//data//name[ value eq "Hash two"]/../value';
         $expected   ||= [ "2" ];
-        my $program   = "$^X -Ilib bin/dpath";
+        my $program   = "$^X -Ilib script/dpath";
         my $unblessed = $outtype eq "json" ? "_unblessed" : "";
         my $infile    = "t/some_tap$unblessed.$intype";
         my $cmd       = "$program -i $intype -o $outtype '$path' $infile";
