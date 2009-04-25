@@ -1,44 +1,107 @@
-App-DPath
+NAME
+    App::DPath - Cmdline tool around Data::DPath
 
-Application C<dpath> as commandline wrapper around L<Data::DPath>.
+VERSION
+    Version 0.01
 
+SYNOPSIS
+    Query a yaml input file to STDOUT as yaml output:
 
+      $ dpath '//some/dpath' data.yaml
 
-INSTALLATION
+    Use it as filter:
 
-To install this module, run the following commands:
+      $ dpath '//some/dpath' < data.yaml > result.yaml
+      $ cat data.yaml | dpath '//some/dpath' > result.yaml
+      $ cat data.yaml | dpath '//path1' | dpath '//path2' | dpath '//path3'
 
-	perl Makefile.PL
-	make
-	make test
-	make install
+    Specify other input and output formats:
 
-SUPPORT AND DOCUMENTATION
+    Output is YAML(default), JSON or Data::Dumper:
 
-After installing, you can find documentation for this module with the
-perldoc command.
+      $ dpath -o yaml   '//some/dpath' data.yaml
+      $ dpath -o json   '//some/dpath' data.yaml
+      $ dpath -o dumper '//some/dpath' data.yaml
 
-    perldoc App::DPath
+    Input is JSON:
 
-You can also look for information at:
+      $ dpath -i json '//some/dpath' data.json
 
-    RT, CPAN's request tracker
-        http://rt.cpan.org/NoAuth/Bugs.html?Dist=App-DPath
+    Input is INI:
 
-    AnnoCPAN, Annotated CPAN documentation
-        http://annocpan.org/dist/App-DPath
+      $ dpath -i ini '//some/dpath' data.ini
 
-    CPAN Ratings
-        http://cpanratings.perl.org/d/App-DPath
+    Input is TAP:
 
-    Search CPAN
-        http://search.cpan.org/dist/App-DPath/
+      $ dpath -i tap '//some/dpath' data.tap
+      $ perl t/some_test.t | dpath -i tap '//tests_planned'
 
+    Input is JSON, Output is Data::Dumper:
 
-COPYRIGHT AND LICENCE
+      $ dpath -i json -o dumper '//some/dpath' data.json
 
-Copyright (C) 2009 Steffen Schwigon
+ABOUT
+    This module provides a cmdline tool around Data::DPath.
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+    You can specify a DPath to query input files or STDIN.
+
+    Several input and output types are allowed. Default is "YAML" as input
+    and output.
+
+    The following input types are allowed, with their according modules used
+    to convert the input into a data structure:
+
+     yaml   - YAML::Syck
+     json   - JSON
+     ini    - Config::INI::Reader
+     dumper - Data::Dumper (including the leading $VAR1 variable assignment)
+     tap    - TAP::DOM
+
+    The following output types are allowed:
+
+     yaml   - YAML::Syck
+     json   - JSON
+     ini    - Config::INI::Writer
+     dumper - Data::Dumper (including the leading $VAR1 variable assignment)
+
+    For more information about the DPath syntax, please see Data::DPath.
+
+AUTHOR
+    Steffen Schwigon, "<<ss5 at renormalist.net>>"
+
+BUGS
+    Please report any bugs or feature requests to "bug-app-dpath at
+    rt.cpan.org", or through the web interface at
+    <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=App-DPath>. I will be
+    notified, and then you'll automatically be notified of progress on your
+    bug as I make changes.
+
+SUPPORT
+    You can find documentation for this module with the perldoc command.
+
+        perldoc App::DPath
+
+    You can also look for information at:
+
+    *   RT: CPAN's request tracker
+
+        <http://rt.cpan.org/NoAuth/Bugs.html?Dist=App-DPath>
+
+    *   AnnoCPAN: Annotated CPAN documentation
+
+        <http://annocpan.org/dist/App-DPath>
+
+    *   CPAN Ratings
+
+        <http://cpanratings.perl.org/d/App-DPath>
+
+    *   Search CPAN
+
+        <http://search.cpan.org/dist/App-DPath/>
+
+COPYRIGHT & LICENSE
+    Copyright 2009 Steffen Schwigon, all rights reserved.
+
+    This program is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself.
 

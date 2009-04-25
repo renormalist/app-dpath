@@ -9,7 +9,7 @@ use Data::DPath 'dpath';
 
 sub opt_spec {
         return (
-                [ "intype|i=s",   "input format, [yaml(default), json, dumper, tap]"  ],
+                [ "intype|i=s",   "input format, [yaml(default), json, dumper, ini, tap]"  ],
                 [ "outtype|o=s",  "output format, [yaml(default), json, dumper]" ],
                );
 }

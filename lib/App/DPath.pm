@@ -13,7 +13,7 @@ our $VERSION = '0.01';
 
 =head1 NAME
 
-App::DPath - Cmdline tool to filter files with Data::DPath
+App::DPath - Cmdline tool around Data::DPath
 
 =head1 VERSION
 
@@ -29,18 +29,25 @@ Query a yaml input file to STDOUT as yaml output:
 
 Use it as filter:
 
-  $ cat data.yaml | dpath '//some/dpath' > result.yaml
   $ dpath '//some/dpath' < data.yaml > result.yaml
+  $ cat data.yaml | dpath '//some/dpath' > result.yaml
+  $ cat data.yaml | dpath '//path1' | dpath '//path2' | dpath '//path3'
 
 Specify other input and output formats:
 
-Output is JSON:
+Output is YAML(default), JSON or Data::Dumper:
 
-  $ dpath -o json '//some/dpath' data.yaml
+  $ dpath -o yaml   '//some/dpath' data.yaml
+  $ dpath -o json   '//some/dpath' data.yaml
+  $ dpath -o dumper '//some/dpath' data.yaml
 
 Input is JSON:
 
   $ dpath -i json '//some/dpath' data.json
+
+Input is INI:
+
+  $ dpath -i ini '//some/dpath' data.ini
 
 Input is TAP:
 
@@ -51,34 +58,32 @@ Input is JSON, Output is Data::Dumper:
 
   $ dpath -i json -o dumper '//some/dpath' data.json
 
-Connect several steps:
-
-  $ cat data.yaml | dpath           '//path1' | dpath           '//path2' | dpath '//path3'
-  $ cat data.yaml | dpath  -o dumper'//path1' | dpath -i dumper '//path2' | dpath '//path3'
 
 
 =head1 ABOUT
 
-This module is a cmdline tool around Data::DPath.
+This module provides a cmdline tool around Data::DPath.
 
-You can specify a DPath and query it against input files or STDIN.
+You can specify a DPath to query input files or STDIN.
 
 Several input and output types are allowed.
 Default is C<YAML> as input and output.
 
-The following input types are allowed, with their according modules
+The following B<input types> are allowed, with their according modules
 used to convert the input into a data structure:
 
  yaml   - YAML::Syck
- dumper - Data::Dumper (including the leading $VAR1 =)
  json   - JSON
+ ini    - Config::INI::Reader
+ dumper - Data::Dumper (including the leading $VAR1 variable assignment)
  tap    - TAP::DOM
 
-The following output types are allowed:
+The following B<output types> are allowed:
 
  yaml   - YAML::Syck
- dumper - Data::Dumper
  json   - JSON
+ ini    - Config::INI::Writer
+ dumper - Data::Dumper (including the leading $VAR1 variable assignment)
 
 For more information about the DPath syntax, please see
 L<Data::DPath|Data::DPath>.
@@ -125,9 +130,6 @@ L<http://cpanratings.perl.org/d/App-DPath>
 L<http://search.cpan.org/dist/App-DPath/>
 
 =back
-
-
-=head1 ACKNOWLEDGEMENTS
 
 
 =head1 COPYRIGHT & LICENSE

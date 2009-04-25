@@ -1,5 +1,4 @@
 Idea collection
 
 * types
-*** INI files
 *** XML::Simple
