@@ -45,6 +45,10 @@ sub read_in {
                 require JSON;
                 $data = JSON::decode_json($filecontent);
         }
+        elsif ($intype eq "ini") {
+                require Config::INI::Reader;
+                $data = Config::INI::Reader->read_string($filecontent);
+        }
         elsif ($intype eq "dumper") {
                 eval '$data = my '.$filecontent;
         }
@@ -80,6 +84,10 @@ sub write_out {
             eval "use JSON -convert_blessed_universally";
             my $json = JSON->new->allow_nonref->pretty->allow_blessed->convert_blessed;
             print $json->encode($resultlist);
+    }
+    elsif ($outtype eq "ini") {
+            require Config::INI::Writer;
+            Config::INI::Writer->write_string($resultlist);
     }
     elsif ($outtype eq "dumper")
     {
