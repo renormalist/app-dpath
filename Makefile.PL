@@ -10,6 +10,7 @@ build_requires 'Test::More';
 requires 'YAML::Syck';
 requires 'JSON';
 requires 'TAP::DOM';
+requires 'Config::INI';
 requires 'Data::DPath';
 requires 'App::Cmd';
 
