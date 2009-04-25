@@ -18,7 +18,7 @@ sub validate_args {
     my ($self, $opt, $args) = @_;
 
     if (not $args->[0]) {
-            print "Please specify a dpath.\n";
+            print STDERR "Please specify a dpath.\n";
             exit 1;
     }
 }
@@ -27,7 +27,6 @@ sub read_in {
         my ($self, $opt, $args, $file) = @_;
 
         my $intype  = $opt->{intype}  || 'yaml';
-        #print STDERR "intype: $intype\n";
         my $data;
         my $filecontent;
         {
@@ -42,6 +41,12 @@ sub read_in {
                         close $FH;
                 }
         }
+
+        if ($filecontent !~ /[^\s\t\r\n]/ms) {
+                print STDERR "Please provide some input data.\n";
+                exit 1;
+        }
+
         if ($intype eq "yaml") {
                 require YAML::Syck;
                 $data = YAML::Syck::Load($filecontent);
@@ -59,7 +64,6 @@ sub read_in {
         }
         elsif ($intype eq "tap") {
                 require TAP::DOM;
-                #print STDERR "filecontent: $filecontent\n";
                 $data = new TAP::DOM( tap => $filecontent );
         }
         else
@@ -71,6 +75,12 @@ sub read_in {
 
 sub match {
         my ($self, $opt, $args, $data, $path) = @_;
+
+        if (not $data) {
+                print STDERR "Please provide proper input data.\n";
+                exit 1;
+        }
+
         my @resultlist = dpath($path)->match($data);
         return \@resultlist;
 }
@@ -111,15 +121,10 @@ sub run {
         my $path    = $args->[0];
         my $file    = $args->[1] || '-';
 
-        #print STDERR "path: $path\n";
-        #print STDERR "file: $file\n";
-
         my $data   = $self->read_in( $opt, $args, $file );
-        #print STDERR "data: ".Dumper($data);
         my $result = $self->match(   $opt, $args, $data, $path );
 
         use Data::Dumper;
-        #print STDERR "result: ".Dumper($result);
         $self->write_out( $opt, $args, $result );
 }
 
