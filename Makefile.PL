@@ -14,9 +14,10 @@ requires 'Config::INI';
 requires 'Data::DPath';
 requires 'App::Cmd';
 
+install_script 'dpath';
+
 repository 'git://github.com/renormalist/app-dpath.git';
 bugtracker 'http://rt.cpan.org/NoAuth/ReportBug.html?Queue=App-DPath';
-install_script 'bin/dpath';
 
 #makemaker_args dist => { PREOP => 'pod2text lib/App/DPath.pm > README' } ;
 
