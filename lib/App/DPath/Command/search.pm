@@ -16,6 +16,11 @@ sub opt_spec {
 
 sub validate_args {
     my ($self, $opt, $args) = @_;
+
+    if (not $args->[0]) {
+            print "Please specify a dpath.\n";
+            exit 1;
+    }
 }
 
 sub read_in {
@@ -124,7 +129,7 @@ sub run {
 
 =head1 NAME
 
-App::DPath::Command::search - The "search" subcommand.
+App::DPath::Command::search - The "search" subcommand (default).
 
 =head1 FUNCTIONS
 

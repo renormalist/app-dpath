@@ -58,7 +58,21 @@ Input is JSON, Output is Data::Dumper:
 
   $ dpath -i json -o dumper '//some/dpath' data.json
 
+=head1 CHEATING
 
+The C<dpath> tool is based on L<App::Cmd> which is using sub
+commands. All the above examples use the default subcommand C<search>
+which is silently inserted into the argument/options list.
+
+So instead of
+
+  $ dpath -i json -o dumper data.json
+
+you can also write
+
+  $ dpath search -i json -o dumper data.json
+
+Other available subcommands are C<help> and C<commands>.
 
 =head1 ABOUT
 
