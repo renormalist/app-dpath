@@ -4,6 +4,8 @@
 
 	* cleanup docs
 
+	* add data format "xml" (via XML::Simple)
+
 2009-04-25  Steffen Schwigon  <ss5@ss5-netbook>
 
 	* 0.01

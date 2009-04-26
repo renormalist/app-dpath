@@ -1,69 +1,15 @@
 NAME
-    App::DPath - Cmdline tool around Data::DPath
+    dpath - Cmdline tool around Data::DPath
 
 SYNOPSIS
-    This module provides a cmdline tool around Data::DPath.
-
-    Query a yaml input file to STDOUT as yaml output:
+    Query some input data with a DPath to stdout.
 
       $ dpath '//some/dpath' data.yaml
 
-    Use it as filter:
-
-      $ dpath '//some/dpath' < data.yaml > result.yaml
-      $ cat data.yaml | dpath '//some/dpath' > result.yaml
-      $ cat data.yaml | dpath '//path1' | dpath '//path2' | dpath '//path3'
-
-    Specify other input and output formats:
-
-    Output is YAML(default), JSON or Data::Dumper:
-
-      $ dpath -o yaml   '//some/dpath' data.yaml
-      $ dpath -o json   '//some/dpath' data.yaml
-      $ dpath -o dumper '//some/dpath' data.yaml
-
-    Input is JSON:
-
-      $ dpath -i json '//some/dpath' data.json
-
-    Input is INI:
-
-      $ dpath -i ini '//some/dpath' data.ini
-
-    Input is TAP:
-
-      $ dpath -i tap '//some/dpath' data.tap
-      $ perl t/some_test.t | dpath -i tap '//tests_planned'
-
-    Input is JSON, Output is Data::Dumper:
+    Specify other input and output formats, e.g.:
 
       $ dpath -i json -o dumper '//some/dpath' data.json
 
-ABOUT
-    A cmdline tool around Data::DPath.
-
-    You can specify a DPath to query input files or STDIN.
-
-    Several input and output types are allowed. Default is "YAML" as input
-    and output.
-
-    The following input types are allowed, with their according modules used
-    to convert the input into a data structure:
-
-     yaml   - YAML::Syck
-     json   - JSON
-     ini    - Config::INI::Reader
-     dumper - Data::Dumper (including the leading $VAR1 variable assignment)
-     tap    - TAP::DOM
-
-    The following output types are allowed:
-
-     yaml   - YAML::Syck
-     json   - JSON
-     ini    - Config::INI::Writer
-     dumper - Data::Dumper (including the leading $VAR1 variable assignment)
-
-    For more information about the DPath syntax, see Data::DPath.
 
 AUTHOR
     Steffen Schwigon, "<<ss5 at renormalist.net>>"
