@@ -121,20 +121,16 @@ sub run {
         my $path    = $args->[0];
         my $file    = $args->[1] || '-';
 
-        my $data   = $self->read_in( $opt, $args, $file );
-        my $result = $self->match(   $opt, $args, $data, $path );
-
-        use Data::Dumper;
+        my $data    = $self->read_in( $opt, $args, $file );
+        my $result  = $self->match(   $opt, $args, $data, $path );
         $self->write_out( $opt, $args, $result );
 }
-
-# $ yourcmd blort --recheck
 
 1;
 
 =head1 NAME
 
-App::DPath::Command::search - The default subcommand to search by dpath, can be omitted
+App::DPath::Command::search - Default subcommand to search by dpath
 
 =head1 FUNCTIONS
 

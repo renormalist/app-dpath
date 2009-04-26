@@ -19,7 +19,9 @@ App::DPath - Cmdline tool around Data::DPath
 
 This module provides a cmdline tool around Data::DPath.
 
-Query a yaml input file to STDOUT as yaml output:
+Query some input data with a DPath to stdout.
+
+Default data type (in and out) is YAML, other types can be specified.
 
   $ dpath '//some/dpath' data.yaml
 
@@ -29,9 +31,7 @@ Use it as filter:
   $ cat data.yaml | dpath '//some/dpath' > result.yaml
   $ cat data.yaml | dpath '//path1' | dpath '//path2' | dpath '//path3'
 
-Specify other input and output formats:
-
-Output is YAML(default), JSON or Data::Dumper:
+Specify that output is YAML(default), JSON or Data::Dumper:
 
   $ dpath -o yaml   '//some/dpath' data.yaml
   $ dpath -o json   '//some/dpath' data.yaml
@@ -54,19 +54,10 @@ Input is JSON, Output is Data::Dumper:
 
   $ dpath -i json -o dumper '//some/dpath' data.json
 
-=head1 ABOUT
-
-A cmdline tool around Data::DPath.
-
-You can specify a DPath to query input files or STDIN.
-
-Several input and output types are allowed.
-Default is C<YAML> as input and output.
-
 The following B<input types> are allowed, with their according modules
 used to convert the input into a data structure:
 
- yaml   - YAML::Syck
+ yaml   - YAML::Syck (default)
  json   - JSON
  ini    - Config::INI::Reader
  dumper - Data::Dumper (including the leading $VAR1 variable assignment)
@@ -74,7 +65,7 @@ used to convert the input into a data structure:
 
 The following B<output types> are allowed:
 
- yaml   - YAML::Syck
+ yaml   - YAML::Syck (default)
  json   - JSON
  ini    - Config::INI::Writer
  dumper - Data::Dumper (including the leading $VAR1 variable assignment)
