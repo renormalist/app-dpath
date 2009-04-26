@@ -32,15 +32,20 @@ Use it as filter:
   $ cat data.yaml | dpath '//some/dpath' > result.yaml
   $ cat data.yaml | dpath '//path1' | dpath '//path2' | dpath '//path3'
 
-Specify that output is YAML(default), JSON or Data::Dumper:
+Specify that output is YAML(default), JSON, XML or Data::Dumper:
 
   $ dpath -o yaml   '//some/dpath' data.yaml
   $ dpath -o json   '//some/dpath' data.yaml
+  $ dpath -o xml    '//some/dpath' data.yaml
   $ dpath -o dumper '//some/dpath' data.yaml
 
 Input is JSON:
 
   $ dpath -i json '//some/dpath' data.json
+
+Input is XML:
+
+  $ dpath -i xml '//some/dpath' data.xml
 
 Input is INI:
 
@@ -55,19 +60,21 @@ Input is JSON, Output is Data::Dumper:
 
   $ dpath -i json -o dumper '//some/dpath' data.json
 
-The following B<input types> are allowed, with their according modules
-used to convert the input into a data structure:
+The following B<input formats> are allowed, with their according
+modules used to convert the input into a data structure:
 
  yaml   - YAML::Syck (default)
  json   - JSON
+ xml    - XML::Simple
  ini    - Config::INI::Reader
  dumper - Data::Dumper (including the leading $VAR1 variable assignment)
  tap    - TAP::DOM
 
-The following B<output types> are allowed:
+The following B<output formats> are allowed:
 
  yaml   - YAML::Syck (default)
  json   - JSON
+ xml    - XML::Simple
  ini    - Config::INI::Writer
  dumper - Data::Dumper (including the leading $VAR1 variable assignment)
 

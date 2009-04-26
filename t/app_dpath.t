@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Data::Dumper;
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::Deep;
 use JSON;
 use YAML::Syck;
@@ -47,6 +47,8 @@ sub check {
 check (qw(yaml json));
 check (qw(yaml dumper));
 check (qw(json dumper));
+# XML <-> data mapping is somewhat artificial, so another path is needed
+check (qw(xml dumper), '//description[ value =~ m(use Data::DPath) ]/../_children//data//Hash two/value');
 check (qw(ini dumper), '//description[ value =~ m(use Data::DPath) ]/../number', [ "1" ]);
 check (qw(ini json),   '//description[ value =~ m(use Data::DPath) ]/../number', [ "1" ]);
 check (qw(ini yaml),   '//description[ value =~ m(use Data::DPath) ]/../number', [ "1" ]);

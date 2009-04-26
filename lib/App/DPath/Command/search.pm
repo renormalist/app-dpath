@@ -9,8 +9,8 @@ use Data::DPath 'dpath';
 
 sub opt_spec {
         return (
-                [ "intype|i=s",   "input format, [yaml(default), json, dumper, ini, tap]"  ],
-                [ "outtype|o=s",  "output format, [yaml(default), json, dumper]" ],
+                [ "intype|i=s",   "input format, [yaml(default), json, dumper, ini, tap, xml]"  ],
+                [ "outtype|o=s",  "output format, [yaml(default), json, dumper, xml]" ],
                );
 }
 
@@ -54,6 +54,12 @@ sub read_in {
         elsif ($intype eq "json") {
                 require JSON;
                 $data = JSON::decode_json($filecontent);
+        }
+        elsif ($intype eq "xml")
+        {
+                require XML::Simple;
+                my $xs = new XML::Simple;
+                $data  = $xs->XMLin($filecontent, KeepRoot => 1);
         }
         elsif ($intype eq "ini") {
                 require Config::INI::Reader;
@@ -108,6 +114,12 @@ sub write_out {
     {
             require Data::Dumper;
             print Data::Dumper::Dumper($resultlist);
+    }
+    elsif ($outtype eq "xml")
+    {
+            require XML::Simple;
+            my $xs = new XML::Simple;
+            print $xs->XMLout($resultlist, AttrIndent => 1, KeepRoot => 1);
     }
     else
     {
