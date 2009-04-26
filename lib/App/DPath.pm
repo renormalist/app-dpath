@@ -6,7 +6,7 @@ use 5.010; # Data::DPath requires it anyway
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 1;
 
