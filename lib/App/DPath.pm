@@ -21,7 +21,8 @@ This module provides a cmdline tool around Data::DPath.
 
 Query some input data with a DPath to stdout.
 
-Default data type (in and out) is YAML, other types can be specified.
+Default data format (in and out) is YAML, other formats can be
+specified.
 
   $ dpath '//some/dpath' data.yaml
 

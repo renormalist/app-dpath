@@ -15,7 +15,8 @@ dpath - Cmdline tool around Data::DPath
 
 Query some input data with a DPath to stdout.
 
-Default data type (in and out) is YAML, other types can be specified.
+Default data format (in and out) is YAML, other formats can be
+specified.
 
   $ dpath '//some/dpath' data.yaml
 
@@ -48,8 +49,8 @@ Input is JSON, Output is Data::Dumper:
 
   $ dpath -i json -o dumper '//some/dpath' data.json
 
-The following B<input types> are allowed, with their according modules
-used to convert the input into a data structure:
+The following B<input formats> are allowed, with their according
+modules used to convert the input into a data structure:
 
  yaml   - YAML::Syck (default)
  json   - JSON
@@ -57,7 +58,7 @@ used to convert the input into a data structure:
  dumper - Data::Dumper (including the leading $VAR1 variable assignment)
  tap    - TAP::DOM
 
-The following B<output types> are allowed:
+The following B<output formats> are allowed:
 
  yaml   - YAML::Syck (default)
  json   - JSON
