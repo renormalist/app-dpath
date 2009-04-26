@@ -42,7 +42,7 @@ sub read_in {
                 }
         }
 
-        if ($filecontent !~ /[^\s\t\r\n]/ms) {
+        if (not defined $filecontent or $filecontent !~ /[^\s\t\r\n]/ms) {
                 print STDERR "Please provide some input data.\n";
                 exit 1;
         }
