@@ -12,6 +12,7 @@ requires 'JSON';
 requires 'TAP::DOM';
 requires 'Config::INI';
 requires 'Data::DPath';
+requires 'XML::Simple';
 requires 'App::Cmd';
 
 install_script 'dpath';
