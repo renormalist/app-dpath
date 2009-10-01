@@ -1,3 +1,13 @@
+2009-10-01  Steffen Schwigon  <ss5@renormalist.net>
+
+	* 0.03
+
+	* add new input type "cfggeneral" for Config::General files
+
+	* fix JSON tests to now work with explicit unbless
+
+	* test suite cleanup
+
 2009-04-26  Steffen Schwigon  <ss5@renormalist.net>
 
 	* 0.02
