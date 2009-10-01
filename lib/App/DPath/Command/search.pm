@@ -134,7 +134,7 @@ sub write_out {
     }
 }
 
-sub run {
+sub execute {
         my ($self, $opt, $args) = @_;
 
         my $path    = $args->[0];
@@ -170,7 +170,7 @@ Writes out the result set according to format.
 
 =head2 opt_spec
 
-=head2 run
+=head2 execute
 
 =head2 validate_args
 

@@ -5,7 +5,9 @@ BEGIN {
         unshift @ARGV, $default_cmd unless $ARGV[0] =~ /search|help|commands/;
 }
 
-use App::DPath -run;
+use App::DPath;
+my $app = App::DPath->new;
+$app->run;
 
 =head1 NAME
 
