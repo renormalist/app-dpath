@@ -14,7 +14,8 @@ requires 'TAP::DOM';
 requires 'Config::INI';
 requires 'Data::DPath';
 requires 'XML::Simple';
-requires 'App::Cmd';
+requires 'Config::General';
+requires 'App::Cmd' => '0.301';
 
 install_script 'dpath';
 

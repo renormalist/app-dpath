@@ -65,6 +65,13 @@ sub read_in {
                 require Config::INI::Reader;
                 $data = Config::INI::Reader->read_string($filecontent);
         }
+        elsif ($intype eq "cfggeneral") {
+                require Config::General;
+                my %data = Config::General->new(-String => $filecontent,
+                                                -InterPolateVars => 1,
+                                               )->getall;
+                $data = \%data;
+        }
         elsif ($intype eq "dumper") {
                 eval '$data = my '.$filecontent;
         }
