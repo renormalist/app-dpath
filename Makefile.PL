@@ -6,6 +6,7 @@ author   'Steffen Schwigon <<ss5@renormalist.net>>';
 license  'perl';
 
 build_requires 'Test::More';
+build_requires 'Data::Structure::Util';
 
 requires 'YAML::Syck';
 requires 'JSON';

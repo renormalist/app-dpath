@@ -8,6 +8,8 @@ use Test::More tests => 8;
 use Test::Deep;
 use JSON;
 use YAML::Syck;
+use Config::General;
+use Data::Structure::Util 'unbless';
 
 BEGIN {
 	use_ok( 'App::DPath' );
@@ -19,8 +21,8 @@ sub check {
         $path       ||= '//lines//description[ value =~ m(use Data::DPath) ]/../_children//data//name[ value eq "Hash two"]/../value';
         $expected   ||= [ "2" ];
         my $program   = "$^X -Ilib script/dpath";
-        my $unblessed = $outtype eq "json" ? "_unblessed" : "";
-        my $infile    = "t/some_tap$unblessed.$intype";
+        #my $unblessed = $outtype eq "json" ? "_unblessed" : "";
+        my $infile    = "t/some_tap.$intype";
         my $cmd       = "$program -i $intype -o $outtype '$path' $infile";
         #diag $cmd;
         my $output    = `$cmd`;
@@ -28,7 +30,7 @@ sub check {
         my $result;
         if ($outtype eq "json")
         {
-                $result = JSON::from_json($output);
+                $result = JSON::from_json(unbless $output);
         }
         elsif ($outtype eq "yaml") {
                 $result = YAML::Syck::Load($output);
