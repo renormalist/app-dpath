@@ -22,7 +22,7 @@ sub check {
         $expected   ||= [ "2" ];
         my $program   = "$^X -Ilib script/dpath";
         #my $unblessed = $outtype eq "json" ? "_unblessed" : "";
-        my $infile    = "t/some_tap.$intype";
+        my $infile    = "t/testdata.$intype";
         my $cmd       = "$program -i $intype -o $outtype '$path' $infile";
         #diag $cmd;
         my $output    = `$cmd`;
