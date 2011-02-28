@@ -22,8 +22,6 @@ install_script 'dpath';
 repository 'git://github.com/renormalist/app-dpath.git';
 bugtracker 'http://rt.cpan.org/NoAuth/ReportBug.html?Queue=App-DPath';
 
-#makemaker_args dist => { PREOP => 'pod2text lib/App/DPath.pm > README' } ;
-
 auto_install;
 
 WriteAll;
