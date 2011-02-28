@@ -8,7 +8,7 @@ license  'perl';
 build_requires 'Test::More';
 build_requires 'Data::Structure::Util';
 
-requires 'YAML::Syck';
+requires 'YAML::Any';
 requires 'JSON';
 requires 'TAP::DOM';
 requires 'Config::INI';

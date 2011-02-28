@@ -48,8 +48,8 @@ sub read_in {
         }
 
         if ($intype eq "yaml") {
-                require YAML::Syck;
-                $data = YAML::Syck::Load($filecontent);
+                require YAML::Any;
+                $data = YAML::Any::Load($filecontent);
         }
         elsif ($intype eq "json") {
                 require JSON;
@@ -104,8 +104,8 @@ sub write_out {
     my $outtype = $opt->{outtype} || 'yaml';
     if ($outtype eq "yaml")
     {
-            require YAML::Syck;
-            print YAML::Syck::Dump($resultlist);
+            require YAML::Any;
+            print YAML::Any::Dump($resultlist);
     }
     elsif ($outtype eq "json")
     {
