@@ -62,8 +62,9 @@ sub read_in {
                 $data  = $xs->XMLin($filecontent, KeepRoot => 1);
         }
         elsif ($intype eq "ini") {
-                require Config::INI::Reader;
-                $data = Config::INI::Reader->read_string($filecontent);
+                # require Config::INI::Reader;
+                # $data = Config::INI::Reader->read_string($filecontent);
+                $data = $self->deserialize($filecontent);
         }
         elsif ($intype eq "cfggeneral") {
                 require Config::General;
@@ -107,6 +108,152 @@ sub format_stringify {
     return $output;
 }
 
+# stolen from App::Serializer::Ini
+sub serialize {
+    my ($self, $data) = @_;
+    $self->_serialize($data, "");
+}
+sub _serialize {
+    my ($self, $data, $section) = @_;
+    my ($section_data, $idx, $key, $elem);
+    if (ref($data) eq "ARRAY") {
+        for ($idx = 0; $idx <= $#$data; $idx++) {
+            $elem = $data->[$idx];
+            if (!ref($elem)) {
+                $section_data .= "[$section]\n" if (!$section_data && $section);
+                $section_data .= "$idx = $elem\n";
+            }
+        }
+        for ($idx = 0; $idx <= $#$data; $idx++) {
+            $elem = $data->[$idx];
+            if (ref($elem)) {
+                $section_data .= $self->_serialize($elem, $section ? "$section.$idx" : $idx);
+            }
+        }
+    }
+    elsif (ref($data)) {
+        foreach $key (sort keys %$data) {
+            $elem = $data->{$key};
+            if (!ref($elem)) {
+                no warnings 'uninitialized';
+                $section_data .= "[$section]\n" if (!$section_data && $section);
+                $section_data .= "$key = $elem\n";
+            }
+        }
+        foreach $key (sort keys %$data) {
+            $elem = $data->{$key};
+            if (ref($elem)) {
+                $section_data .= $self->_serialize($elem, $section ? "$section.$key" : $key);
+            }
+        }
+    }
+
+    return $section_data;
+}
+sub get_branch {
+    my ($self, $branch_name, $create, $ref) = @_;
+    my ($sub_branch_name, $branch_piece, $attrib, $type, $branch, $cache_ok);
+    $ref = $self if (!defined $ref);
+
+    # check the cache quickly and return the branch if found
+    $cache_ok = (ref($ref) ne "ARRAY" && $ref eq $self); # only cache from $self
+    $branch = $ref->{_branch}{$branch_name} if ($cache_ok);
+    return ($branch) if (defined $branch);
+
+    # not found, so we need to parse the $branch_name and walk the $ref tree
+    $branch = $ref;
+    $sub_branch_name = "";
+
+    # these: "{field1}" "[3]" "field2." are all valid branch pieces
+    while ($branch_name =~ s/^([\{\[]?)([^\.\[\]\{\}]+)([\.\]\}]?)//) {
+
+        $branch_piece = $2;
+        $type = $3;
+        $sub_branch_name .= ($3 eq ".") ? "$1$2" : "$1$2$3";
+
+        if (ref($branch) eq "ARRAY") {
+            if (! defined $branch->[$branch_piece]) {
+                if ($create) {
+                    $branch->[$branch_piece] = ($type eq "]") ? [] : {};
+                    $branch = $branch->[$branch_piece];
+                    $ref->{_branch}{$sub_branch_name} = $branch if ($cache_ok);
+                }
+                else {
+                    return(undef);
+                }
+            }
+            else {
+                $branch = $branch->[$branch_piece];
+                $sub_branch_name .= "$1$2$3";   # accumulate the $sub_branch_name
+            }
+        }
+        else {
+            if (! defined $branch->{$branch_piece}) {
+                if ($create) {
+                    $branch->{$branch_piece} = ($type eq "]") ? [] : {};
+                    $branch = $branch->{$branch_piece};
+                    $ref->{_branch}{$sub_branch_name} = $branch if ($cache_ok);
+                }
+                else {
+                    return(undef);
+                }
+            }
+            else {
+                $branch = $branch->{$branch_piece};
+            }
+        }
+        $sub_branch_name .= $type if ($type eq ".");
+    }
+    return $branch;
+}
+sub set {
+    my ($self, $property_name, $property_value, $ref) = @_;
+    #$ref = $self if (!defined $ref);
+
+    my ($branch_name, $attrib, $type, $branch, $cache_ok);
+    if ($property_name =~ /^(.*)([\.\{\[])([^\.\[\]\{\}]+)([\]\}]?)$/) {
+        $branch_name = $1;
+        $type = $2;
+        $attrib = $3;
+        $cache_ok = (ref($ref) ne "ARRAY" && $ref eq $self);
+        $branch = $ref->{_branch}{$branch_name} if ($cache_ok);
+        $branch = $self->get_branch($1,1,$ref) if (!defined $branch);
+    }
+    else {
+        $branch = $ref;
+        $attrib = $property_name;
+    }
+
+    if (ref($branch) eq "ARRAY") {
+        $branch->[$attrib] = $property_value;
+    }
+    else {
+        $branch->{$attrib} = $property_value;
+    }
+}
+sub deserialize {
+    my ($self, $inidata) = @_;
+    my ($data, $r, $line, $attrib_base, $attrib, $value);
+
+    $data = {};
+
+    $attrib_base = "";
+    foreach $line (split(/\n/, $inidata)) {
+        next if ($line =~ /^;/);  # ignore comments
+        next if ($line =~ /^#/);  # ignore comments
+        if ($line =~ /^\[([^\[\]]+)\] *$/) {  # i.e. [Repository.default]
+            $attrib_base = $1;
+        }
+        if ($line =~ /^ *([^ =]+) *= *(.*)$/) {
+            $attrib = $attrib_base ? "$attrib_base.$1" : $1;
+            $value = $2;
+            $self->set($attrib, $value, $data);
+        }
+    }
+    return $data;
+}
+# END stolen ::App::Serialize::Ini
+
 sub write_out {
     my ($self, $opt, $args, $resultlist) = @_;
 
@@ -123,8 +270,7 @@ sub write_out {
             print $json->encode($resultlist);
     }
     elsif ($outtype eq "ini") {
-            require Config::INI::Writer;
-            Config::INI::Writer->write_string($resultlist);
+            print $self->serialize($resultlist);
     }
     elsif ($outtype eq "dumper")
     {
