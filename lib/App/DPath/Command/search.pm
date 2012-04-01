@@ -97,6 +97,15 @@ sub match {
         my @resultlist = dpath($path)->match($data);
         return \@resultlist;
 }
+sub format_stringify {
+    my ($self, $resultlist) = @_;
+
+    my $output = "";
+    foreach my $entry (@$resultlist) {
+            $output .= $entry."\n";
+    }
+    return $output;
+}
 
 sub write_out {
     my ($self, $opt, $args, $resultlist) = @_;
@@ -127,6 +136,9 @@ sub write_out {
             require XML::Simple;
             my $xs = new XML::Simple;
             print $xs->XMLout($resultlist, AttrIndent => 1, KeepRoot => 1);
+    }
+    elsif ($outtype eq "stringify") {
+            print $self->format_stringify( $resultlist );
     }
     else
     {
