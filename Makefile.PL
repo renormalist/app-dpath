@@ -16,6 +16,7 @@ requires 'Data::DPath';
 requires 'XML::Simple';
 requires 'Config::General';
 requires 'App::Cmd' => '0.301';
+requires 'Scalar::Util';
 
 install_script 'dpath';
 

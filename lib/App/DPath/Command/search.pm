@@ -6,6 +6,7 @@ use strict;
 use warnings;
 
 use Data::DPath 'dpath';
+use Scalar::Util 'reftype';
 
 sub opt_spec {
         return (
@@ -98,46 +99,32 @@ sub match {
         my @resultlist = dpath($path)->match($data);
         return \@resultlist;
 }
-sub format_stringify {
+sub format_flat {
     my ($self, $resultlist) = @_;
 
     my $output = "";
-    foreach my $entry (@$resultlist) {
-            $output .= $entry."\n";
-    }
-    return $output;
-}
-
-# stolen from App::Serializer::Ini
-sub serialize {
-    my ($self, $data) = @_;
-    $self->_serialize($data, "");
-}
-sub _serialize {
-    my ($self, $data, $section) = @_;
-    my ($section_data, $idx, $key, $elem);
-    if (ref($data) eq "ARRAY") {
-        for ($idx = 0; $idx <= $#$data; $idx++) {
-            $elem = $data->[$idx];
-            if (!ref($elem)) {
-                $section_data .= "[$section]\n" if (!$section_data && $section);
-                $section_data .= "$idx = $elem\n";
+    my $firstentry = $resultlist->[0];
+    if (defined $firstentry) {
+            # TODO: die if inner values are not matching expectation
+            if (!defined reftype $firstentry) {
+                    # stringify
+                    foreach my $entry (@$resultlist) {
+                            $output .= $entry."\n";
+                    }
             }
-        }
-        for ($idx = 0; $idx <= $#$data; $idx++) {
-            $elem = $data->[$idx];
-            if (ref($elem)) {
-                $section_data .= $self->_serialize($elem, $section ? "$section.$idx" : $idx);
+            elsif (reftype $firstentry eq 'ARRAY') {
+                    # join values
+                    foreach my $entry (@$resultlist) {
+                            my @values = @{$entry // []};
+                            $output .= join(" ", map { "".$_ } @values)."\n";
+                    }
             }
-        }
-    }
-    elsif (ref($data)) {
-        foreach $key (sort keys %$data) {
-            $elem = $data->{$key};
-            if (!ref($elem)) {
-                no warnings 'uninitialized';
-                $section_data .= "[$section]\n" if (!$section_data && $section);
-                $section_data .= "$key = $elem\n";
+            elsif (reftype $firstentry eq 'HASH') {
+                    # key whitespace value
+                    foreach my $entry (@$resultlist) {
+                            my %values = %{$entry // {}};
+                            $output .= join(" ", map { "".$_ } %values )."\n";
+                    }
             }
     }
 
@@ -176,8 +163,8 @@ sub write_out {
             my $xs = new XML::Simple;
             print $xs->XMLout($resultlist, AttrIndent => 1, KeepRoot => 1);
     }
-    elsif ($outtype eq "stringify") {
-            print $self->format_stringify( $resultlist );
+    elsif ($outtype eq "flat") {
+            print $self->format_flat( $resultlist );
     }
     else
     {
