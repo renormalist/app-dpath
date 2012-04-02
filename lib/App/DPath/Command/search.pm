@@ -10,8 +10,9 @@ use Scalar::Util 'reftype';
 
 sub opt_spec {
         return (
-                [ "intype|i=s",   "input format, [yaml(default), json, dumper, ini, tap, xml]"  ],
-                [ "outtype|o=s",  "output format, [yaml(default), json, dumper, xml]" ],
+                [ "intype|i=s",    "input format, [yaml(default), json, dumper, ini, tap, xml]"  ],
+                [ "outtype|o=s",   "output format, [yaml(default), json, dumper, xml]" ],
+                [ "separator|s=s", "sub entry separator for output format 'flat' (default=;)" ],
                );
 }
 
@@ -92,45 +93,77 @@ sub match {
         my ($self, $opt, $args, $data, $path) = @_;
 
         if (not $data) {
-                print STDERR "Please provide proper input data.\n";
-                exit 1;
+                die "dpath: error: no input data to match.\n";
         }
 
         my @resultlist = dpath($path)->match($data);
         return \@resultlist;
 }
-sub format_flat {
-    my ($self, $resultlist) = @_;
+
+sub _format_flat_array {
+    my ($self, $opt, $result) = @_;
+
+    return join($opt->{separator}, map { "".$_ } @$result)."\n";
+}
+
+sub _format_flat_hash {
+    my ($self, $opt, $result) = @_;
+
+    return join($opt->{separator}, map { "$_=".$result->{$_} } keys %$result)."\n";
+}
+
+sub _format_flat_inner {
+    my ($self, $opt, $result) = @_;
 
     my $output = "";
-    my $firstentry = $resultlist->[0];
-    if (defined $firstentry) {
-            # TODO: die if inner values are not matching expectation
-            if (!defined reftype $firstentry) {
-                    # stringify
-                    foreach my $entry (@$resultlist) {
-                            $output .= $entry."\n";
+    die "Can not flatten data structure. Try another output type.\n" unless defined $result;
+
+    if (!defined reftype $result) { # SCALAR
+            $output .= $result."\n"; # stringify
+    }
+    elsif (reftype $result eq 'ARRAY') {
+            foreach my $entry (@$result) {
+                    if (reftype $entry eq 'ARRAY') {
+                            $output .= $self->_format_flat_array($opt, $entry);
+                    }
+                    elsif (reftype $entry eq 'HASH') {
+                            $output .= $self->_format_flat_hash($opt, $entry);
+                    }
+                    else {
+                            die "dpath: can not flatten data structure (".reftype($entry).").\n";
                     }
             }
-            elsif (reftype $firstentry eq 'ARRAY') {
-                    # join values
-                    foreach my $entry (@$resultlist) {
-                            my @values = @{$entry // []};
-                            $output .= join(" ", map { "".$_ } @values)."\n";
+    }
+    elsif (reftype $result eq 'HASH') {
+            my @keys = keys %$result;
+            foreach my $key (@keys) {
+                    my $entry = $result->{$key};
+                    if (reftype $entry eq 'ARRAY') {
+                            $output .= "$key:".$self->_format_flat_array($opt, $entry);
+                    }
+                    elsif (reftype $entry eq 'HASH') {
+                            $output .= "$key:".$self->_format_flat_hash($opt, $entry);
+                    }
+                    else {
+                            die "dpath: can not flatten data structure (".reftype($entry).").\n";
                     }
             }
-            elsif (reftype $firstentry eq 'HASH') {
-                    # key whitespace value
-                    foreach my $entry (@$resultlist) {
-                            my %values = %{$entry // {}};
-                            $output .= join(" ", map { "".$_ } %values )."\n";
-                    }
-            }
+    }
+    else {
+            die "dpath: can not flatten data structure (".reftype($result).") - try other output type.\n";
     }
 
     return $output;
 }
 
+sub _format_flat {
+    my ($self, $opt, $resultlist) = @_;
+
+    my $output = "";
+    $opt->{separator} = ";" unless defined $opt->{separator};
+    $output .= $self->_format_flat_inner($opt, $_) foreach @$resultlist;
+    return $output;
+}
 
 sub write_out {
     my ($self, $opt, $args, $resultlist) = @_;
@@ -164,7 +197,7 @@ sub write_out {
             print $xs->XMLout($resultlist, AttrIndent => 1, KeepRoot => 1);
     }
     elsif ($outtype eq "flat") {
-            print $self->format_flat( $resultlist );
+            print $self->_format_flat( $opt, $resultlist );
     }
     else
     {
