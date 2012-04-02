@@ -11,7 +11,7 @@ build_requires 'Data::Structure::Util';
 requires 'YAML::Any';
 requires 'JSON';
 requires 'TAP::DOM';
-requires 'Config::INI';
+requires 'Config::INI::Serializer';
 requires 'Data::DPath';
 requires 'XML::Simple';
 requires 'Config::General';
