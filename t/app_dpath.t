@@ -4,11 +4,12 @@ use strict;
 use warnings;
 
 use Data::Dumper;
-use Test::More tests => 16;
+use Test::More;
 use Test::Deep;
 use JSON;
 use YAML::Syck;
 use Config::General;
+use Config::INI::Serializer;
 use Data::Structure::Util 'unbless';
 
 BEGIN {
@@ -43,6 +44,9 @@ sub check {
         {
                 eval "\$result = my $output";
         }
+        elsif ($outtype eq "ini") {
+                $result = Config::INI::Serializer->new->deserialize($output);
+        }
         if ($just_diag) {
                 diag Dumper($result);
         } else {
@@ -58,6 +62,10 @@ check (qw(xml dumper), '//description[ value =~ m(use Data::DPath) ]/../_childre
 check (qw(ini dumper), '//description[ value =~ m(use Data::DPath) ]/../number', [ "1" ]);
 check (qw(ini json),   '//description[ value =~ m(use Data::DPath) ]/../number', [ "1" ]);
 check (qw(ini yaml),   '//description[ value =~ m(use Data::DPath) ]/../number', [ "1" ]);
+# Config::INI::Serializer hashifies arrays - array indexes become hashkeys
+check (qw(ini ini),    '//description[ value =~ m(use Data::DPath) ]/../number', { '0' => "1" });
+check (qw(xml ini),    '//description[ value =~ m(use Data::DPath) ]/../number', { '0' => "1" });
+check (qw(ini ini),    '/start_time', { '0' => "1236463400.25151" });
 
 # Config::General is also somewhat special
 check (qw(cfggeneral json), '/etc/base', [ "/usr" ]);
@@ -69,3 +77,5 @@ check (qw(cfggeneral yaml), '/etc/base', [ "/usr" ]);
 check (qw(cfggeneral yaml), '//home', [ "/usr/home/max" ]);
 check (qw(cfggeneral yaml), '//mono//bl', [ 2 ]);
 check (qw(cfggeneral yaml), '//log', [ "/usr/log/logfile" ]);
+
+done_testing;

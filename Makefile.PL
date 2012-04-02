@@ -5,7 +5,7 @@ all_from 'lib/App/DPath.pm';
 author   'Steffen Schwigon <<ss5@renormalist.net>>';
 license  'perl';
 
-build_requires 'Test::More';
+build_requires 'Test::More' => '0.88';
 build_requires 'Data::Structure::Util';
 
 requires 'YAML::Any';
