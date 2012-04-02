@@ -20,8 +20,7 @@ sub validate_args {
     my ($self, $opt, $args) = @_;
 
     if (not $args->[0]) {
-            print STDERR "Please specify a dpath.\n";
-            exit 1;
+            die "dpath: please specify a dpath.\n";
     }
 }
 
@@ -45,8 +44,7 @@ sub read_in {
         }
 
         if (not defined $filecontent or $filecontent !~ /[^\s\t\r\n]/ms) {
-                print STDERR "Please provide some input data.\n";
-                exit 1;
+                die "dpath: error: no meaningful input data to read.\n";
         }
 
         if ($intype eq "yaml") {
@@ -84,7 +82,7 @@ sub read_in {
         }
         else
         {
-                die "Unrecognized input type: $intype";
+                die "dpath: error: unrecognized input type: $intype\n";
         }
         return $data;
 }
@@ -201,7 +199,7 @@ sub write_out {
     }
     else
     {
-            die "Unrecognized output type: $outtype";
+            die "dpath: unrecognized output type: $outtype";
     }
 }
 
