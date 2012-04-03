@@ -13,6 +13,8 @@ sub opt_spec {
                 [ "intype|i=s",    "input format, [yaml(default), json, dumper, ini, tap, xml]"  ],
                 [ "outtype|o=s",   "output format, [yaml(default), json, dumper, xml]" ],
                 [ "separator|s=s", "sub entry separator for output format 'flat' (default=;)" ],
+                [ "fb",            "on output format 'flat' use [brackets] around outer arrays" ],
+                [ "fi",            "on output format 'flat' prefix outer arrays with index" ],
                );
 }
 
@@ -122,19 +124,24 @@ sub _format_flat_outer {
     my $output = "";
     die "Can not flatten data structure. Try another output type.\n" unless defined $result;
 
+    my $A = ""; my $B = ""; if ($opt->{fb}) { $A = "["; $B = "]" }
+    my $fi = $opt->{fi};
+
     if (!defined reftype $result) { # SCALAR
             $output .= $result."\n"; # stringify
     }
     elsif (reftype $result eq 'ARRAY') {
-            foreach my $entry (@$result) {
+            for (my $i=0; $i<@$result; $i++) {
+                    my $entry  = $result->[$i];
+                    my $prefix = $fi ? "$i:" : "";
                     if (!defined reftype $entry) { # SCALAR
-                            $output .= "[".$self->_format_flat_inner_scalar($opt, $entry)."]\n";
+                            $output .= $prefix.$A.$self->_format_flat_inner_scalar($opt, $entry)."$B\n";
                     }
                     elsif (reftype $entry eq 'ARRAY') {
-                            $output .= "[".$self->_format_flat_inner_array($opt, $entry)."]\n";
+                            $output .= $prefix.$A.$self->_format_flat_inner_array($opt, $entry)."$B\n";
                     }
                     elsif (reftype $entry eq 'HASH') {
-                            $output .= "[".$self->_format_flat_inner_hash($opt, $entry)."]\n";
+                            $output .= $prefix.$A.$self->_format_flat_inner_hash($opt, $entry)."$B\n";
                     }
                     else {
                             die "dpath: can not flatten data structure (".reftype($entry).").\n";
