@@ -98,19 +98,25 @@ sub match {
         return \@resultlist;
 }
 
-sub _format_flat_array {
+sub _format_flat_inner_scalar {
     my ($self, $opt, $result) = @_;
 
-    return join($opt->{separator}, map { "".$_ } @$result)."\n";
+    return "$result";
 }
 
-sub _format_flat_hash {
+sub _format_flat_inner_array {
     my ($self, $opt, $result) = @_;
 
-    return join($opt->{separator}, map { "$_=".$result->{$_} } keys %$result)."\n";
+    return join($opt->{separator}, map { "".$_ } @$result);
 }
 
-sub _format_flat_inner {
+sub _format_flat_inner_hash {
+    my ($self, $opt, $result) = @_;
+
+    return join($opt->{separator}, map { "$_=".$result->{$_} } keys %$result);
+}
+
+sub _format_flat_outer {
     my ($self, $opt, $result) = @_;
 
     my $output = "";
@@ -121,11 +127,14 @@ sub _format_flat_inner {
     }
     elsif (reftype $result eq 'ARRAY') {
             foreach my $entry (@$result) {
-                    if (reftype $entry eq 'ARRAY') {
-                            $output .= $self->_format_flat_array($opt, $entry);
+                    if (!defined reftype $entry) { # SCALAR
+                            $output .= "[".$self->_format_flat_inner_scalar($opt, $entry)."]\n";
+                    }
+                    elsif (reftype $entry eq 'ARRAY') {
+                            $output .= "[".$self->_format_flat_inner_array($opt, $entry)."]\n";
                     }
                     elsif (reftype $entry eq 'HASH') {
-                            $output .= $self->_format_flat_hash($opt, $entry);
+                            $output .= "[".$self->_format_flat_inner_hash($opt, $entry)."]\n";
                     }
                     else {
                             die "dpath: can not flatten data structure (".reftype($entry).").\n";
@@ -136,11 +145,14 @@ sub _format_flat_inner {
             my @keys = keys %$result;
             foreach my $key (@keys) {
                     my $entry = $result->{$key};
-                    if (reftype $entry eq 'ARRAY') {
-                            $output .= "$key:".$self->_format_flat_array($opt, $entry);
+                    if (!defined reftype $entry) { # SCALAR
+                            $output .= "$key:".$self->_format_flat_inner_scalar($opt, $entry)."\n";
+                    }
+                    elsif (reftype $entry eq 'ARRAY') {
+                            $output .= "$key:".$self->_format_flat_inner_array($opt, $entry)."\n";
                     }
                     elsif (reftype $entry eq 'HASH') {
-                            $output .= "$key:".$self->_format_flat_hash($opt, $entry);
+                            $output .= "$key:".$self->_format_flat_inner_hash($opt, $entry)."\n";
                     }
                     else {
                             die "dpath: can not flatten data structure (".reftype($entry).").\n";
@@ -159,7 +171,7 @@ sub _format_flat {
 
     my $output = "";
     $opt->{separator} = ";" unless defined $opt->{separator};
-    $output .= $self->_format_flat_inner($opt, $_) foreach @$resultlist;
+    $output .= $self->_format_flat_outer($opt, $_) foreach @$resultlist;
     return $output;
 }
 
@@ -299,3 +311,4 @@ under the same terms as Perl itself.
 
 =cut
 
+# echo "" ; for p in '//firstname' '//metadata' '//metadata//Affe' '//reports' ; do echo $p ; perl -Ilib script/dpath -o flat $p < t/flatabledata.yaml ; echo "" ; done
