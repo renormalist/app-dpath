@@ -1,0 +1,27 @@
+Revision history for {{$dist->name}}
+
+{{$NEXT}}
+  [Maintenance]
+  - use Dist::Zilla for building
+
+  [new input/output formats]
+  - fix RT#76018: Please provide a UNIX shell friendly output format
+    intoduce new format 'flat' for typical 1 or 2 level hash/array data
+    structures
+  - fix RT#76017 - INI output format broken
+    now use Config::INI::Serializer
+
+  [bugfixes]
+  - use YAML::Any to decide which YAML to use
+
+0.03      2009-10-01
+  - add new input type "cfggeneral" for Config::General files
+  - fix JSON tests to now work with explicit unbless
+  - test suite cleanup
+
+0.02      2009-04-26
+  - cleanup docs
+  - add data format "xml" (via XML::Simple)
+
+0.01      2009-04-25
+  - initial version

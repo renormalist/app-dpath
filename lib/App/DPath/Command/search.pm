@@ -1,4 +1,5 @@
 package App::DPath::Command::search;
+# ABSTRACT: Default subcommand to search by dpath
 
 use App::DPath -command;
 
@@ -235,9 +236,7 @@ sub execute {
 
 1;
 
-=head1 NAME
-
-App::DPath::Command::search - Default subcommand to search by dpath
+__END__
 
 =head1 FUNCTIONS
 
@@ -261,60 +260,6 @@ Writes out the result set according to format.
 =head2 execute
 
 =head2 validate_args
-
-=head1 AUTHOR
-
-Steffen Schwigon, C<< <<ss5 at renormalist.net>> >>
-
-=head1 BUGS
-
-Please report any bugs or feature requests to C<bug-app-dpath at
-rt.cpan.org>, or through the web interface at
-L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=App-DPath>.  I will
-be notified, and then you'll automatically be notified of progress on
-your bug as I make changes.
-
-
-=head1 SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
-    perldoc App::DPath
-
-
-You can also look for information at:
-
-=over 4
-
-=item * RT: CPAN's request tracker
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=App-DPath>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/App-DPath>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/App-DPath>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/App-DPath/>
-
-=back
-
-
-=head1 ACKNOWLEDGEMENTS
-
-
-=head1 COPYRIGHT & LICENSE
-
-Copyright 2009 Steffen Schwigon, all rights reserved.
-
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
-
 
 =cut
 
