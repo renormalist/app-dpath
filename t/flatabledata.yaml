@@ -7,8 +7,9 @@ names:
 - firstname: Birne
   lastname: Dingens
 metadata:
+  Eric: The flat one from the 90s
   Affe:
-    size: big
+    size: average
     coolness: big
   Zomtec:
     size: average
