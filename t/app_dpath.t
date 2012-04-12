@@ -78,4 +78,22 @@ check (qw(cfggeneral yaml), '//home', [ "/usr/home/max" ]);
 check (qw(cfggeneral yaml), '//mono//bl', [ 2 ]);
 check (qw(cfggeneral yaml), '//log', [ "/usr/log/logfile" ]);
 
+diag 'Ignore output warnings about "Unsupported innermost nesting"...';
+
+my $program;
+my $infile;
+my $path;
+my $ret;
+
+$program   = "$^X -Ilib script/dpath";
+$infile    = "t/flatabledata.yaml";
+
+$path      = "//UnsupportedInnermostHash";
+$ret = system("$program -o flat '$path' $infile");
+isnt ($ret, 0, "deny unsupported innermost HASH");
+
+$path      = "//UnsupportedInnermostArray";
+$ret = system("$program -o flat '$path' $infile");
+isnt ($ret, 0, "deny unsupported innermost ARRAY");
+
 done_testing;
