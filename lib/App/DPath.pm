@@ -56,27 +56,108 @@ Input is JSON, Output is Data::Dumper:
 
   $ dpath -i json -o dumper '//some/dpath' data.json
 
+=head2 Input formats
+
 The following B<input formats> are allowed, with their according
 modules used to convert the input into a data structure:
 
  yaml   - YAML::Syck (default)
  json   - JSON
  xml    - XML::Simple
- ini    - Config::INI::Reader
+ ini    - Config::INI::Serializer
  dumper - Data::Dumper (including the leading $VAR1 variable assignment)
  tap    - TAP::DOM
+
+=head2 Output formats
 
 The following B<output formats> are allowed:
 
  yaml   - YAML::Syck (default)
  json   - JSON
  xml    - XML::Simple
- ini    - Config::INI::Writer
+ ini    - Config::INI::Serializer
  dumper - Data::Dumper (including the leading $VAR1 variable assignment)
+ flat   - pragmatic flat output for typical unixish cmdline usage
 
 For more information about the DPath syntax, see
 L<Data::DPath|Data::DPath>.
 
+=head2 The 'flat' output format
+
+The C<flat> output format is meant to support typical unixish command
+line uses. It is not a strong serialization format but works well for
+simple values nested max 2 levels.
+
+Output looks like this:
+
+=head3 Plain values
+
+ Affe
+ Tiger
+ Birne
+
+=head3 Outer hashes
+
+One outer key per line, key at the beginning of line with a colon
+(C<:>), inner values separated by semicolon C<;>:
+
+=head4 inner scalars:
+
+ coolness:big
+ size:average
+ Eric:The flat one from the 90s
+
+=head4 inner hashes:
+
+Tuples of C<key=value> separated by semicolon C<;>:
+
+ Affe:coolness=big;size=average
+ Zomtec:coolness=bit anachronistic;size=average
+
+=head4 inner arrays:
+
+Values separated by semicolon C<;>:
+
+ Birne:bissel;hinterher;manchmal
+
+=head3 Outer arrays
+
+One entry per line, entries separated by semicolon C<;>:
+
+=head4 inner scalars:
+
+ single report string
+ foo
+ bar
+ baz
+
+=head4 inner hashes:
+
+Tuples of C<key=value> separated by semicolon C<;>:
+
+ Affe=amazing moves in the jungle;Zomtec=slow talking speed;Birne=unexpected in many respects
+
+=head4 inner arrays:
+
+Entries separated by semicolon C<;>:
+
+ line A-1;line A-2;line A-3;line A-4;line A-5
+ line B-1;line B-2;line B-3;line B-4
+ line C-1;line C-2;line C-3
+
+=head3 Additional markup for arrays:
+
+ --fb            ... use [brackets] around outer arrays
+ --fi            ... prefix outer array lines with index
+ --separator=;   ... use given separator between array entries (defaults to ";")
+
+Such additional markup lets outer arrays look like this:
+
+ 0:[line A-1;line A-2;line A-3;line A-4;line A-5]
+ 1:[line B-1;line B-2;line B-3;line B-4]
+ 2:[line C-1;line C-2;line C-3]
+ 3:[Affe=amazing moves in the jungle;Zomtec=slow talking speed;Birne=unexpected in many respects]
+ 4:[single report string]
 
 =head1 DEFAULT COMMAND CHEATING
 
