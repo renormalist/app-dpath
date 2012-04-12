@@ -38,3 +38,14 @@ reports:
   Zomtec: slow talking speed
   Birne: unexpected in many respects
 - "single report string"
+
+UnsupportedInnermostHash:
+  Nesting:
+    Level:
+      foo: 111
+      bar: 222
+UnsupportedInnermostArray:
+  Nesting:
+    Level:
+      - foo
+      - bar
