@@ -15,7 +15,7 @@ sub opt_spec {
                 [ "outtype|o=s",   "output format, [yaml(default), json, dumper, xml]" ],
                 [ "separator|s=s", "sub entry separator for output format 'flat' (default=;)" ],
                 [ "fb",            "on output format 'flat' use [brackets] around outer arrays" ],
-                [ "fi",            "on output format 'flat' prefix outer arrays with index" ],
+                [ "fi",            "on output format 'flat' prefix outer array lines with index" ],
                );
 }
 
@@ -110,13 +110,21 @@ sub _format_flat_inner_scalar {
 sub _format_flat_inner_array {
     my ($self, $opt, $result) = @_;
 
-    return join($opt->{separator}, map { "".$_ } @$result);
+    return join($opt->{separator}, map {
+                                        # only SCALARS allowed (where reftype returns undef)
+                                        die "Unsupported innermost nesting (".reftype($_).")\n" if defined reftype($_);
+                                        "".$_
+                                       } @$result);
 }
 
 sub _format_flat_inner_hash {
     my ($self, $opt, $result) = @_;
 
-    return join($opt->{separator}, map { "$_=".$result->{$_} } keys %$result);
+    return join($opt->{separator}, map { my $v = $result->{$_};
+                                         # only SCALARS allowed (where reftype returns undef)
+                                         die "Unsupported innermost nesting (".reftype($v).")\n" if defined reftype($v);
+                                         "$_=".$v
+                                       } keys %$result);
 }
 
 sub _format_flat_outer {
@@ -262,5 +270,3 @@ Writes out the result set according to format.
 =head2 validate_args
 
 =cut
-
-# echo "" ; for p in '//firstname' '//metadata' '//metadata//Affe' '//reports' ; do echo $p ; perl -Ilib script/dpath -o flat $p < t/flatabledata.yaml ; echo "" ; done
