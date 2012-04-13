@@ -40,14 +40,14 @@ sub read_in {
                 }
                 else
                 {
-                        open (my $FH, "<", $file) or die "Cannot open file $file";
+                        open (my $FH, "<", $file) or die "dpath: cannot open input file $file.\n";
                         $filecontent = <$FH>;
                         close $FH;
                 }
         }
 
         if (not defined $filecontent or $filecontent !~ /[^\s\t\r\n]/ms) {
-                die "dpath: error: no meaningful input data to read.\n";
+                die "dpath: no meaningful input to read.\n";
         }
 
         if ($intype eq "yaml") {
@@ -85,7 +85,7 @@ sub read_in {
         }
         else
         {
-                die "dpath: error: unrecognized input type: $intype\n";
+                die "dpath: unrecognized input format: $intype.\n";
         }
         return $data;
 }
@@ -94,7 +94,7 @@ sub match {
         my ($self, $opt, $args, $data, $path) = @_;
 
         if (not $data) {
-                die "dpath: error: no input data to match.\n";
+                die "dpath: no input data to match.\n";
         }
 
         my @resultlist = dpath($path)->match($data);
@@ -112,7 +112,7 @@ sub _format_flat_inner_array {
 
     return join($opt->{separator}, map {
                                         # only SCALARS allowed (where reftype returns undef)
-                                        die "Unsupported innermost nesting (".reftype($_).")\n" if defined reftype($_);
+                                        die "dpath: unsupported innermost nesting (".reftype($_).") for 'flat' output.\n" if defined reftype($_);
                                         "".$_
                                        } @$result);
 }
@@ -122,7 +122,7 @@ sub _format_flat_inner_hash {
 
     return join($opt->{separator}, map { my $v = $result->{$_};
                                          # only SCALARS allowed (where reftype returns undef)
-                                         die "Unsupported innermost nesting (".reftype($v).")\n" if defined reftype($v);
+                                         die "dpath: unsupported innermost nesting (".reftype($v).") for 'flat' output.\n" if defined reftype($v);
                                          "$_=".$v
                                        } keys %$result);
 }
@@ -131,7 +131,7 @@ sub _format_flat_outer {
     my ($self, $opt, $result) = @_;
 
     my $output = "";
-    die "Can not flatten data structure. Try another output type.\n" unless defined $result;
+    die "dpath: can not flatten data structure (undef) - try other output format.\n" unless defined $result;
 
     my $A = ""; my $B = ""; if ($opt->{fb}) { $A = "["; $B = "]" }
     my $fi = $opt->{fi};
@@ -176,7 +176,7 @@ sub _format_flat_outer {
             }
     }
     else {
-            die "dpath: can not flatten data structure (".reftype($result).") - try other output type.\n";
+            die "dpath: can not flatten data structure (".reftype($result).") - try other output format.\n";
     }
 
     return $output;
@@ -227,7 +227,7 @@ sub write_out {
     }
     else
     {
-            die "dpath: unrecognized output type: $outtype";
+            die "dpath: unrecognized output format: $outtype.";
     }
 }
 

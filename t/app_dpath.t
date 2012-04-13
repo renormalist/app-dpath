@@ -78,7 +78,7 @@ check (qw(cfggeneral yaml), '//home', [ "/usr/home/max" ]);
 check (qw(cfggeneral yaml), '//mono//bl', [ 2 ]);
 check (qw(cfggeneral yaml), '//log', [ "/usr/log/logfile" ]);
 
-diag 'Ignore output warnings about "Unsupported innermost nesting"...';
+diag qq{Ignore "unsupported innermost nesting" errors, that's what we test...};
 
 my $program;
 my $infile;
