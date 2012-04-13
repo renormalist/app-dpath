@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.04      2012-04-13
   [Maintenance]
   - use Dist::Zilla for building
 
