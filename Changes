@@ -6,13 +6,14 @@ Revision history for {{$dist->name}}
 
   [new input/output formats]
   - fix RT#76018: Please provide a UNIX shell friendly output format
-    intoduce new format 'flat' for typical 1 or 2 level hash/array data
-    structures
+    * intoduce new output format 'flat' for typical 1 or 2 level
+      scalar/hash/array data structures
   - fix RT#76017 - INI output format broken
-    now use Config::INI::Serializer
+    * now use Config::INI::Serializer
 
   [bugfixes]
   - use YAML::Any to decide which YAML to use
+  - "die" instead of "exit" on error
 
 0.03      2009-10-01
   - add new input type "cfggeneral" for Config::General files
