@@ -1,5 +1,6 @@
 #! /usr/bin/perl
-# ABSTRACT: 'dpath' cmdline tool around Data::DPath
+# PODNAME: dpath
+# ABSTRACT: cmdline tool around Data::DPath
 
 BEGIN {
         my $default_cmd = "search";
