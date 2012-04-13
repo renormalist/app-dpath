@@ -21,7 +21,7 @@ sub check {
 
         $path       ||= '//lines//description[ value =~ m(use Data::DPath) ]/../_children//data//name[ value eq "Hash two"]/../value';
         $expected   ||= [ "2" ];
-        my $program   = "$^X -Ilib script/dpath";
+        my $program   = "$^X -Ilib bin/dpath";
         #my $unblessed = $outtype eq "json" ? "_unblessed" : "";
         my $infile    = "t/testdata.$intype";
         my $cmd       = "$program -i $intype -o $outtype '$path' $infile";
@@ -85,7 +85,7 @@ my $infile;
 my $path;
 my $ret;
 
-$program   = "$^X -Ilib script/dpath";
+$program   = "$^X -Ilib bin/dpath";
 $infile    = "t/flatabledata.yaml";
 
 $path      = "//UnsupportedInnermostHash";
