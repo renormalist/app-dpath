@@ -13,7 +13,7 @@ use Config::INI::Serializer;
 use Data::Structure::Util 'unbless';
 
 BEGIN {
-	use_ok( 'App::DPath' );
+        use_ok( 'App::DPath' );
 }
 
 sub check {
