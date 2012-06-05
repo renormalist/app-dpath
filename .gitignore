@@ -2,3 +2,5 @@
 !.gitignore
 App-DPath-*
 Debian_CPANTS.txt
+nytprof.out
+nytprof/
