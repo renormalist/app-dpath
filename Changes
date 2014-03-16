@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - same as 0.05; uploaded again without nytprof dumps
 
 0.05      2014-03-16
         - -i tap assumes TAP version 13
