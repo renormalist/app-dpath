@@ -50,6 +50,7 @@ sub check {
         }
 }
 
+check (qw(tap json));
 check (qw(yaml json));
 check (qw(yaml dumper));
 check (qw(json dumper));
