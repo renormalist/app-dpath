@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.06      2014-03-16
         - same as 0.05; uploaded again without nytprof dumps
 
 0.05      2014-03-16
