@@ -133,7 +133,8 @@ sub _read_in
         }
         elsif ($intype eq "tap") {
                 require TAP::DOM;
-                $data = new TAP::DOM( tap => $filecontent, version => 13 );
+                require TAP::Parser;
+                $data = new TAP::DOM( tap => $filecontent, $TAP::Parser::VERSION > 3.22 ? (version => 13) : () );
         }
         else
         {
