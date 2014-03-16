@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - -i tap assumes TAP version 13
+          (with TAP::Parser 3.22+)
+        - migrate from App::Cmd to App::Rad
 
 0.04      2012-04-13
   [Maintenance]
