@@ -15,12 +15,12 @@ use Data::Structure::Util 'unbless';
 sub check {
         my ($intype, $outtype, $path, $expected, $just_diag) = @_;
 
-        $path       ||= '//lines//description[ value =~ m(use Data::DPath) ]/../_children//data//name[ value eq "Hash two"]/../value';
+        $path       ||= '//lines//description[ value =~ m(use Data::DPath) ]/../_children//data//name[ value eq \'Hash two\']/../value';
         $expected   ||= [ "2" ];
         my $program   = "$^X -Ilib bin/dpath";
         #my $unblessed = $outtype eq "json" ? "_unblessed" : "";
         my $infile    = "t/testdata.$intype";
-        my $cmd       = "$program -i $intype -o $outtype '$path' $infile";
+        my $cmd       = "$program -i $intype -o $outtype \"$path\" $infile";
         #diag $cmd;
         my $output    = `$cmd`;
 
