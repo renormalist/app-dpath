@@ -62,10 +62,14 @@ sub search :Help(search incoming data by DPath (default commmand))
 
         my $path    = $c->argv->[0];
         my $file    = $c->argv->[1] || '-';
-
         my $data    = _read_in( $c, $file );
-        my $result  = _match(   $c, $data, $path );
-        return _write_out($c, $result);
+
+        my $out;
+        foreach my $datum (ref $data eq ref [] ? @$data : $data) {
+            my $result = _match($c, $datum, $path);
+            $out .= _write_out($c, $result);
+        }
+        return $out;
 }
 
 sub default { search(@_) }
@@ -104,7 +108,7 @@ sub _read_in
 
         if ($intype eq "yaml") {
                 require YAML::Any;
-                $data = YAML::Any::Load($filecontent);
+                $data = [YAML::Any::Load($filecontent)];
         }
         elsif ($intype eq "json") {
                 require JSON;
