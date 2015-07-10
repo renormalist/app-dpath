@@ -277,7 +277,7 @@ sub _write_out
         }
         elsif ($outtype eq "json")
         {
-                use JSON::MaybeXS;
+                require JSON;
                 my $json = JSON->new->allow_nonref->pretty->allow_blessed->convert_blessed;
                 $output .= $json->encode($resultlist);
         }
