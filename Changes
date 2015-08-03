@@ -2,6 +2,10 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+0.07      2015-08-03
+        - Adjust quoting to pass windows testing [Lance A. Brown]
+        - Search all YAML docs instead of just the last one [Michael Carman]
+
 0.06      2014-03-16
         - same as 0.05; uploaded again without nytprof dumps
 
