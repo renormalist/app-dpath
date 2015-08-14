@@ -374,7 +374,7 @@ Input is JSON, Output is Data::Dumper:
 The following B<input formats> are allowed, with their according
 modules used to convert the input into a data structure:
 
- yaml   - YAML::Syck (default)
+ yaml   - YAML::Any (default)
  json   - JSON
  xml    - XML::Simple
  ini    - Config::INI::Serializer
@@ -385,7 +385,7 @@ modules used to convert the input into a data structure:
 
 The following B<output formats> are allowed:
 
- yaml   - YAML::Syck (default)
+ yaml   - YAML::Any (default)
  json   - JSON
  xml    - XML::Simple
  ini    - Config::INI::Serializer
