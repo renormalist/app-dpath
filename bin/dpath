@@ -163,12 +163,16 @@ sub _format_flat_inner_scalar
 {
     my ($c, $result) = @_;
 
+    no warnings 'uninitialized';
+
     return "$result";
 }
 
 sub _format_flat_inner_array
 {
         my ($c, $result) = @_;
+
+        no warnings 'uninitialized';
 
         my $opt = $c->options;
 
@@ -185,6 +189,8 @@ sub _format_flat_inner_hash
 {
         my ($c, $result) = @_;
 
+        no warnings 'uninitialized';
+
         my $opt = $c->options;
 
         return
@@ -199,6 +205,8 @@ sub _format_flat_inner_hash
 sub _format_flat_outer
 {
         my ($c, $result) = @_;
+
+        no warnings 'uninitialized';
 
         my $opt = $c->options;
 
