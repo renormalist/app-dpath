@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.09      2015-09-30
         - generalize the use of YAML with an option --yaml-module
         - and throw away again format 'yaml10' which I just invented an
           hour ago in version 0.08
