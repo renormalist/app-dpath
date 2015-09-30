@@ -41,7 +41,10 @@ sub help
                            [yaml(default), json, dumper, xml]
         -i
         --intype         - input format
-                           [yaml(default), yaml10, json, dumper, xml, tap, ini]
+                           [yaml(default), json, dumper, xml, tap, ini]
+        --yaml-module    - which YAML module to use for format 'yaml'
+                           [YAML::XS, YAML, YAML::Old, YAML::Tiny, YAML::Syck]
+                           (by default it uses what YAML::Any finds, but not YAML::Syck)
         -s
         --separator      - sub entry separator for output format 'flat'
                            (default=;)
@@ -108,12 +111,12 @@ sub _read_in
 
         if ($intype eq "yaml") {
                 require YAML::Any;
-                @YAML::Any::_TEST_ORDER=(qw(YAML::XS YAML::Old YAML YAML::Tiny)); # no YAML::Syck
+                if ($opt->{'yaml-module'}) {
+                        @YAML::Any::_TEST_ORDER=($opt->{'yaml-module'});
+                } else {
+                        @YAML::Any::_TEST_ORDER=(qw(YAML::XS YAML::Old YAML YAML::Tiny)); # no YAML::Syck
+                }
                 $data = [YAML::Any::Load($filecontent)];
-        }
-        elsif ($intype eq "yaml10") {
-                require YAML::Syck;
-                $data = [YAML::Syck::Load($filecontent)];
         }
         elsif ($intype eq "json") {
                 require JSON;
@@ -290,13 +293,12 @@ sub _write_out
         if ($outtype eq "yaml")
         {
                 require YAML::Any;
-                @YAML::Any::_TEST_ORDER=(qw(YAML::XS YAML::Old YAML YAML::Tiny)); # no YAML::Syck
+                if ($opt->{'yaml-module'}) {
+                        @YAML::Any::_TEST_ORDER=($opt->{'yaml-module'});
+                } else {
+                        @YAML::Any::_TEST_ORDER=(qw(YAML::XS YAML::Old YAML YAML::Tiny)); # no YAML::Syck
+                }
                 $output .= YAML::Any::Dump($resultlist);
-        }
-        elsif ($outtype eq "yaml10")
-        {
-                require YAML::Syck;
-                $output .= YAML::Syck::Dump($resultlist);
         }
         elsif ($outtype eq "json")
         {
@@ -339,6 +341,7 @@ sub _getopt
                     "intype|i=s",
                     "outtype|o=s",
                     "separator|s=s",
+                    "yaml-module|s=s",
                     "fb",
                     "fi",
                   )
@@ -394,7 +397,6 @@ The following B<input formats> are allowed, with their according
 modules used to convert the input into a data structure:
 
  yaml   - YAML::Any (default; not using YAML::Syck)
- yaml10 - YAML::Syck
  json   - JSON
  xml    - XML::Simple
  ini    - Config::INI::Serializer
@@ -406,7 +408,6 @@ modules used to convert the input into a data structure:
 The following B<output formats> are allowed:
 
  yaml   - YAML::Any (default; not using YAML::Syck)
- yaml10 - YAML::Syck
  json   - JSON
  xml    - XML::Simple
  ini    - Config::INI::Serializer
