@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.08      2015-09-30
         - no longer use YAML::Syck to handle input/output format 'yaml'
           (blacklisted for YAML::Any which we use in behind the scenes)
         - new input/output format 'yaml10' which uses YAML::Syck
