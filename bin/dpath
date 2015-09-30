@@ -111,6 +111,10 @@ sub _read_in
                 @YAML::Any::_TEST_ORDER=(qw(YAML::XS YAML::Old YAML YAML::Tiny)); # no YAML::Syck
                 $data = [YAML::Any::Load($filecontent)];
         }
+        elsif ($intype eq "yaml10") {
+                require YAML::Syck;
+                $data = [YAML::Syck::Load($filecontent)];
+        }
         elsif ($intype eq "json") {
                 require JSON;
                 $data = JSON::decode_json($filecontent);
@@ -288,6 +292,11 @@ sub _write_out
                 require YAML::Any;
                 @YAML::Any::_TEST_ORDER=(qw(YAML::XS YAML::Old YAML YAML::Tiny)); # no YAML::Syck
                 $output .= YAML::Any::Dump($resultlist);
+        }
+        elsif ($outtype eq "yaml10")
+        {
+                require YAML::Syck;
+                $output .= YAML::Syck::Dump($resultlist);
         }
         elsif ($outtype eq "json")
         {
