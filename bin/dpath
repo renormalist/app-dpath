@@ -41,7 +41,7 @@ sub help
                            [yaml(default), json, dumper, xml]
         -i
         --intype         - input format
-                           [yaml(default), json, dumper, xml, tap, ini]
+                           [yaml(default), yaml10, json, dumper, xml, tap, ini]
         -s
         --separator      - sub entry separator for output format 'flat'
                            (default=;)
@@ -108,6 +108,7 @@ sub _read_in
 
         if ($intype eq "yaml") {
                 require YAML::Any;
+                @YAML::Any::_TEST_ORDER=(qw(YAML::XS YAML::Old YAML YAML::Tiny)); # no YAML::Syck
                 $data = [YAML::Any::Load($filecontent)];
         }
         elsif ($intype eq "json") {
@@ -285,6 +286,7 @@ sub _write_out
         if ($outtype eq "yaml")
         {
                 require YAML::Any;
+                @YAML::Any::_TEST_ORDER=(qw(YAML::XS YAML::Old YAML YAML::Tiny)); # no YAML::Syck
                 $output .= YAML::Any::Dump($resultlist);
         }
         elsif ($outtype eq "json")
