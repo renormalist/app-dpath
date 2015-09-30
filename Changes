@@ -1,6 +1,10 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - generalize the use of YAML with an option --yaml-module
+        - and throw away again format 'yaml10' which I just invented an
+          hour ago in version 0.08
+        - by default it still does not use 'YAML::Syck' though
 
 0.08      2015-09-30
         - no longer use YAML::Syck to handle input/output format 'yaml'
