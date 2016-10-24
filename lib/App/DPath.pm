@@ -5,6 +5,8 @@ use 5.008; # Data::DPath requires it
 use strict;
 use warnings;
 
+use Scalar::Util 'reftype';
+
 sub read_in
 {
         #my ($c, $file) = @_;
@@ -78,7 +80,7 @@ sub read_in
 
 sub _format_flat_inner_scalar
 {
-    my ($c, $result) = @_;
+    my ($result) = @_;
 
     no warnings 'uninitialized';
 
@@ -135,7 +137,7 @@ sub _format_flat_outer
                         my $entry  = $result->[$i];
                         my $prefix = $fi ? "$i:" : "";
                         if (!defined reftype $entry) { # SCALAR
-                                $output .= $prefix.$A._format_flat_inner_scalar($opt, $entry)."$B\n";
+                                $output .= $prefix.$A._format_flat_inner_scalar($entry)."$B\n";
                         }
                         elsif (reftype $entry eq 'ARRAY') {
                                 $output .= $prefix.$A._format_flat_inner_array($opt, $entry)."$B\n";
@@ -153,7 +155,7 @@ sub _format_flat_outer
                 foreach my $key (@keys) {
                         my $entry = $result->{$key};
                         if (!defined reftype $entry) { # SCALAR
-                                $output .= "$key:"._format_flat_inner_scalar($opt, $entry)."\n";
+                                $output .= "$key:"._format_flat_inner_scalar($entry)."\n";
                         }
                         elsif (reftype $entry eq 'ARRAY') {
                                 $output .= "$key:"._format_flat_inner_array($opt, $entry)."\n";
@@ -237,9 +239,19 @@ sub write_out
 
 __END__
 
-=head1 ABOUT
+=head1 DESCRIPTION
 
-This module handles the input and output for the L<dpath|dpath> command.
+This module handles the input and output for the L<dpath> command.
+
+=head1 SYNOPSIS
+
+    use App::DPath;
+
+    my $path = '//some/dpath';
+    my $data = App::DPath::read_in ($file);
+    my @resultlist = dpath($path)->match($data);
+    my $output = App::DPath::write_out ({}, \@resultlist);
+    print $output;
 
 =head1 SUBROUTINES
 
@@ -252,9 +264,9 @@ from the file according to the type specified in the second argument
 (which defaults to 'yaml') and returns the resulting data structure. Other
 data types are: 'json', 'xml', 'ini', 'cfggeneral', 'dumper' and 'tap'.
 
-The optional third argument specifies which module to use to parse
-YAML. If unspecified it defaults to the first available of YAML::XS,
-YAML::Old, YAML and YAML::Tiny.
+The optional third argument specifies a list of modules to use to parse
+YAML. The first available module in the list is used. If unspecified it
+defaults to L<YAML::XS>, L<YAML::Old>, L<YAML> and L<YAML::Tiny>.
 
 =head2 write_out
 
@@ -304,5 +316,16 @@ For outtype=yaml only. The YAML processing module to use. If not
 provided it uses the same default as read_in.
 
 =back
+
+$resultstring is expected to be an arrayref, usually the result of
+running a match against the read-in data.
+
+=head1 SEE ALSO
+
+L<dpath> is the command-line wrapper around this module. Its
+documentation includes details of the "flat" output format along with
+some usage examples.
+
+L<Data::DPath> is the underlying path engine.
 
 =cut

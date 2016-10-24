@@ -9,7 +9,6 @@ use warnings;
 use App::Rad;
 use App::DPath;
 use Data::DPath 'dpath';
-use Scalar::Util 'reftype';
 
 ######################################################################
 #
