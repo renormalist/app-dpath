@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - new input type -i 'taparchive' backed by TAP::DOM::Archive
 
 0.09      2015-09-30
         - generalize the use of YAML with an option --yaml-module

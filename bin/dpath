@@ -41,7 +41,7 @@ sub help
                            [yaml(default), json, dumper, xml]
         -i
         --intype         - input format
-                           [yaml(default), json, dumper, xml, tap, ini]
+                           [yaml(default), json, dumper, xml, tap, taparchive, ini]
         --yaml-module    - which YAML module to use for format 'yaml'
                            [YAML::XS, YAML, YAML::Old, YAML::Tiny, YAML::Syck]
                            (by default it uses what YAML::Any finds, but not YAML::Syck)
@@ -147,6 +147,11 @@ sub _read_in
                 require TAP::DOM;
                 require TAP::Parser;
                 $data = new TAP::DOM( tap => $filecontent, $TAP::Parser::VERSION > 3.22 ? (version => 13) : () );
+        }
+        elsif ($intype eq "taparchive") {
+                require TAP::DOM::Archive;
+                require TAP::Parser;
+                $data = new TAP::DOM::Archive( filecontent => $filecontent, $TAP::Parser::VERSION > 3.22 ? (version => 13) : () );
         }
         else
         {
@@ -387,6 +392,10 @@ Input is TAP:
   $ dpath -i tap '//some/dpath' data.tap
   $ perl t/some_test.t | dpath -i tap '//tests_planned'
 
+Input is TAP::Archive:
+
+  $ dpath -i taparchive '//tests_planned' tap.tgz
+
 Input is JSON, Output is Data::Dumper:
 
   $ dpath -i json -o dumper '//some/dpath' data.json
@@ -402,6 +411,7 @@ modules used to convert the input into a data structure:
  ini    - Config::INI::Serializer
  dumper - Data::Dumper (including the leading $VAR1 variable assignment)
  tap    - TAP::DOM
+ tap    - TAP::DOM::Archive
 
 =head2 Output formats
 
