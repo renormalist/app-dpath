@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.10      2017-02-17
         - new input type -i 'taparchive' backed by TAP::DOM::Archive
 
 0.09      2015-09-30
