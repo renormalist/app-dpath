@@ -75,6 +75,12 @@ check (qw(cfggeneral yaml), '//home', [ "/usr/home/max" ]);
 check (qw(cfggeneral yaml), '//mono//bl', [ 2 ]);
 check (qw(cfggeneral yaml), '//log', [ "/usr/log/logfile" ]);
 
+# taparchive
+check (qw(taparchive ini),    '//description[ value =~ m(use Data::DPath) ]/../number', { '0' => "1" });
+check (qw(taparchive json),   '//description[ value =~ m(use Data::DPath) ]/../number', ["1"]) ;
+check (qw(taparchive yaml),   '//description[ value =~ m(use Data::DPath) ]/../number', ["1"]);
+check (qw(taparchive dumper), '//description[ value =~ m(use Data::DPath) ]/../number', ["1"]);
+
 diag qq{Ignore "unsupported innermost nesting" errors, that is what we test...};
 
 my $program;
