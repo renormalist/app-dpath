@@ -71,6 +71,11 @@ sub read_in
                 require TAP::Parser;
                 $data = new TAP::DOM( tap => $filecontent, $TAP::Parser::VERSION > 3.22 ? (version => 13) : () );
         }
+        elsif ($intype eq "taparchive") {
+                require TAP::DOM::Archive;
+                require TAP::Parser;
+                $data = new TAP::DOM::Archive( filecontent => $filecontent, $TAP::Parser::VERSION > 3.22 ? (version => 13) : () );
+        }
         else
         {
                 die "dpath: unrecognized input format: $intype.\n";
