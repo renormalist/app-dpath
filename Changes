@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - stringify SCALARS, usually blessed JSON::PP::Boolean;
+          this enables the output type 'flat' when getting json
+          input containing booleans.
 
 0.10      2017-02-17
         - new input type -i 'taparchive' backed by TAP::DOM::Archive

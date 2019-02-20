@@ -137,6 +137,9 @@ sub _format_flat_outer
         if (!defined reftype $result) { # SCALAR
                 $output .= $result."\n"; # stringify
         }
+        elsif (reftype $result eq 'SCALAR') { # blessed SCALAR
+                $output .= $result."\n"; # stringify
+        }
         elsif (reftype $result eq 'ARRAY') {
                 for (my $i=0; $i<@$result; $i++) {
                         my $entry  = $result->[$i];
