@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.11      2019-02-20
         - stringify SCALARS, usually blessed JSON::PP::Boolean;
           this enables the output type 'flat' when getting json
           input containing booleans.
