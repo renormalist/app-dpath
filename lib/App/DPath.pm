@@ -69,12 +69,12 @@ sub read_in
         elsif ($intype eq "tap") {
                 require TAP::DOM;
                 require TAP::Parser;
-                $data = new TAP::DOM( tap => $filecontent, $TAP::Parser::VERSION > 3.22 ? (version => 13) : () );
+                $data = new TAP::DOM( tap => $filecontent, trim_fieldvalues => 1, $TAP::Parser::VERSION > 3.22 ? (version => 13) : () );
         }
         elsif ($intype eq "taparchive") {
                 require TAP::DOM::Archive;
                 require TAP::Parser;
-                $data = new TAP::DOM::Archive( filecontent => $filecontent, $TAP::Parser::VERSION > 3.22 ? (version => 13) : () );
+                $data = new TAP::DOM::Archive( filecontent => $filecontent, trim_fieldvalues => 1, $TAP::Parser::VERSION > 3.22 ? (version => 13) : () );
         }
         else
         {
