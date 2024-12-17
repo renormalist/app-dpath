@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.12      2024-12-17
         - trim values in TAP::DOM(::Archive) by default
         - use 'noempty_tap' in TAP::DOM(::Archive) by default
         - fix getopt specification duplicate of -s
