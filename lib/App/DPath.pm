@@ -48,7 +48,7 @@ sub read_in
         elsif ($intype eq "xml")
         {
                 require XML::Simple;
-                my $xs = new XML::Simple;
+                my $xs = XML::Simple->new;
                 $data  = $xs->XMLin($filecontent, KeepRoot => 1);
         }
         elsif ($intype eq "ini") {
@@ -69,12 +69,12 @@ sub read_in
         elsif ($intype eq "tap") {
                 require TAP::DOM;
                 require TAP::Parser;
-                $data = new TAP::DOM( tap => $filecontent, trim_fieldvalues => 1, noempty_tap => 1, $TAP::Parser::VERSION > 3.22 ? (version => 13) : () );
+                $data = TAP::DOM->new( tap => $filecontent, trim_fieldvalues => 1, noempty_tap => 1, $TAP::Parser::VERSION > 3.22 ? (version => 13) : () );
         }
         elsif ($intype eq "taparchive") {
                 require TAP::DOM::Archive;
                 require TAP::Parser;
-                $data = new TAP::DOM::Archive( filecontent => $filecontent, trim_fieldvalues => 1, noempty_tap => 1, $TAP::Parser::VERSION > 3.22 ? (version => 13) : () );
+                $data = TAP::DOM::Archive->new( filecontent => $filecontent, trim_fieldvalues => 1, noempty_tap => 1, $TAP::Parser::VERSION > 3.22 ? (version => 13) : () );
         }
         else
         {
@@ -228,7 +228,7 @@ sub write_out
         elsif ($outtype eq "xml")
         {
                 require XML::Simple;
-                my $xs = new XML::Simple;
+                my $xs = XML::Simple->new;
                 $output .= $xs->XMLout($resultlist, AttrIndent => 1, KeepRoot => 1);
         }
         elsif ($outtype eq "flat") {
