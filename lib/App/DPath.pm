@@ -70,14 +70,16 @@ sub read_in
                 eval '$data = my '.$filecontent;
         }
         elsif ($intype eq "tap") {
+                my $_config = $config->{tap};
                 require TAP::DOM;
                 require TAP::Parser;
-                $data = TAP::DOM->new( tap => $filecontent, trim_fieldvalues => 1, noempty_tap => 1, $TAP::Parser::VERSION > 3.22 ? (version => 13) : () );
+                $data = TAP::DOM->new( tap => $filecontent, trim_fieldvalues => 1, noempty_tap => 1, $TAP::Parser::VERSION > 3.22 ? (version => 13) : (), %$_config );
         }
         elsif ($intype eq "taparchive") {
                 require TAP::DOM::Archive;
                 require TAP::Parser;
-                $data = TAP::DOM::Archive->new( filecontent => $filecontent, trim_fieldvalues => 1, noempty_tap => 1, $TAP::Parser::VERSION > 3.22 ? (version => 13) : () );
+                my $_config = $config->{taparchive};
+                $data = TAP::DOM::Archive->new( filecontent => $filecontent, trim_fieldvalues => 1, noempty_tap => 1, $TAP::Parser::VERSION > 3.22 ? (version => 13) : (), %$_config );
         }
         else
         {

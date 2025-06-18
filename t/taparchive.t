@@ -5,7 +5,7 @@ use warnings;
 use Test::More 0.88;
 use Data::Dumper;
 
-my $program    = "$^X -Ilib bin/dpath";
+my $program    = "$^X -Ilib bin/dpath --norc";
 my $infile     = "t/testdata.taparchive";
 
 my $dumper = `$program -i taparchive -o dumper / $infile`;

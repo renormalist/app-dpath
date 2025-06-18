@@ -52,6 +52,7 @@ sub help
                            outer arrays
         --fi             - on output format 'flat' prefix outer array lines
                            with index
+        --norc           - do not use C<~/.dpathrc> config file.
 
         See 'perldoc Data::DPath' for how to specify a DPath.
 ";
@@ -62,6 +63,7 @@ sub search :Help(search incoming data by DPath (default commmand))
         my ($c) = @_;
 
         _getopt($c);
+        _read_config($c) unless $c->options->{'norc'};
 
         my $path    = $c->argv->[0];
         my $file    = $c->argv->[1] || '-';
@@ -106,11 +108,45 @@ sub _getopt
                     "yaml-module",
                     "fb",
                     "fi",
+                    "norc",
                   )
          or help() and return undef;
         if (not $c->argv->[0]) {
                 die "dpath: please specify a dpath.\n";
         }
+}
+
+sub _read_config
+{
+  my ($c) = @_;
+
+  require Config::INI::Serializer;
+  my $ini = Config::INI::Serializer->new;
+
+  my $config = {};
+  my $cfgfile = $ENV{APPDPATH_CONFIG_FILE} || ($ENV{HOME}.'/.dpathrc');
+
+  if (-r $cfgfile) {
+    my $filecontent;
+    {
+      local $/;
+      open (my $FH, "<", $cfgfile) or die "dpath: cannot open config file $cfgfile.\n";
+      $filecontent = <$FH>;
+      close $FH;
+    }
+    $config = $ini->deserialize($filecontent);
+
+    # Tweak special cases
+    $config->{tap}{ignore} = [split(qr/\s+/, $config->{tap}{ignore})] if $config->{tap}{ignore};
+    if ($config->{tap} and not defined $config->{taparchive}) {
+      $config->{taparchive} = $config->{tap};
+    } else {
+      $config->{taparchive}{ignore} = [split(qr/\s+/, $config->{taparchive}{ignore})]
+        if $config->{taparchive}{ignore};
+    }
+  }
+
+  $c->options->{config} = $config;
 }
 
 __END__
@@ -257,6 +293,58 @@ Such additional markup lets outer arrays look like this:
  2:[line C-1;line C-2;line C-3]
  3:[Affe=amazing moves in the jungle;Zomtec=slow talking speed;Birne=unexpected in many respects]
  4:[single report string]
+
+=head1 Configuration file
+
+Some of the used modules to read or write a format allow
+configuration. C<dpath> reads a C<~/.dpathrc> file (or the file
+provided by environment variable APPDPATH_CONFIG_FILE) in which you
+can define for each format a config that is provided to the respective
+module.
+
+Use C<--norc> to suppress reading the C<.dpathrc> file.
+
+Currently only the format C<tap> (and implicitly also C<taparchive>
+are allowed).
+
+=over 4
+
+=item * tap
+
+The format is ini file sytax, and could look like this:
+
+  [tap]
+  disable_global_kv_data = 1
+  put_dangling_kv_data_under_lazy_plan = 1
+  ignorelines = (## |# Test-irrelevant-field-)
+  dontignorelines = (?i:# Test-irrelevant-field-butkeepthis)
+  ignoreunknown = 1
+  preprocess_ignorelines = 1
+  preprocess_tap = 1
+  noempty_tap = 1
+  utf8 = 1
+  usebitsets = 0
+  sparse = 1
+  ; keep 'raw' which is the unmodified variant
+  ignore = as_string
+  lowercase_fieldnames = 1
+  trim_fieldvalues = 1
+
+See L<TAP::DOM|TAP::DOM> for documentation of the keys.
+
+=item * taparchive
+
+If there is no dedicated C<[taparchive]> section, the config from
+C<[tap]> is copied over after it was processed itself (like the split
+of ignore fields by whitespace). If you don't want that, then create
+an empty C<[taparchive]> section, e.g. with at least one redundant or
+default value in it, like this:
+
+  [taparchive]
+  ignore =
+
+
+=back
 
 
 =head1 SEE ALSO

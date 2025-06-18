@@ -13,7 +13,7 @@ Ignore the following YAML parsing errors - that's what we test...
 
 };
 
-my $program    = "$^X -Ilib bin/dpath";
+my $program    = "$^X -Ilib bin/dpath --norc";
 my $infile     = "t/example.yaml10";
 
 sub dpath_with_yaml_module

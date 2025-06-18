@@ -88,7 +88,7 @@ my $infile;
 my $path;
 my $ret;
 
-$program   = "$^X -Ilib bin/dpath";
+$program   = "$^X -Ilib bin/dpath --norc";
 $infile    = "t/flatabledata.yaml";
 
 $path      = "//UnsupportedInnermostHash";
