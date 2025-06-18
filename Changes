@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - allow ~/.dpathrc config for file type settings
 
 0.12      2024-12-17
         - trim values in TAP::DOM(::Archive) by default
