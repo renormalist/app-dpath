@@ -65,8 +65,7 @@ sub search :Help(search incoming data by DPath (default commmand))
 
         my $path    = $c->argv->[0];
         my $file    = $c->argv->[1] || '-';
-        my $data    = App::DPath::read_in( $file, $c->options->{intype},
-            $c->options->{'yaml-module'} );
+        my $data    = App::DPath::read_in($c->options, $file);
 
         my $out;
         foreach my $datum (ref $data eq ref [] ? @$data : $data) {

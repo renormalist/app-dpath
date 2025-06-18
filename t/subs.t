@@ -86,28 +86,28 @@ is App::DPath::_format_flat ({}, ['a', ['b', 'c'], { d => 'e' }]),
     "a\nb\nc\nd:e\n",
     '_format_flat';
 
-eval { App::DPath::read_in ("t/testdata.yaml", 'foo'); };
+eval { App::DPath::read_in ({intype => 'foo'}, "t/testdata.yaml"); };
 like $@, qr/unrecognized input format: foo/,
     'read_in with unknown type exception thrown';
 eval { App::DPath::write_out ({ outtype => 'foo' }, ['a', 'b']); };
 like $@, qr/unrecognized output format: foo/,
     'write_out with unknown outtype exception thrown';
 
-my $data = App::DPath::read_in ("t/testdata.yaml");
+my $data = App::DPath::read_in ({}, "t/testdata.yaml");
 ok (defined ($data), 'Default type YAML for reading');
 my $output = App::DPath::write_out ({}, $data);
 ok (defined ($output), 'Default type YAML for reading');
 
-eval { App::DPath::read_in ("t/testdata.empty"); };
+eval { App::DPath::read_in ({}, "t/testdata.empty"); };
 like $@, qr/no meaningful input to read/,
     'read_in with empty file exception thrown';
-eval { App::DPath::read_in ("t/nosuchfile"); };
+eval { App::DPath::read_in ({}, "t/nosuchfile"); };
 like $@, qr/cannot open input file/,
     'read_in with non-existent file exception thrown';
 
 my @types = qw/cfggeneral dumper ini json tap xml yaml/;
 for my $intype (@types) {
-    $data = App::DPath::read_in ("t/testdata.$intype", $intype);
+    $data = App::DPath::read_in ({intype => $intype}, "t/testdata.$intype");
     ok (defined ($data), "$intype data read");
     for my $outtype (@types) {
         next if $outtype eq 'tap' || $outtype eq 'cfggeneral';

@@ -10,9 +10,12 @@ use Scalar::Util 'reftype';
 sub read_in
 {
         #my ($c, $file) = @_;
-        my ($file, $intype, $yamlmod) = @_;
+        my ($opt, $file) = @_;
 
-        $intype ||= 'yaml';
+        my $intype  = $opt->{intype} ||= 'yaml';
+        my $yamlmod = $opt->{'yaml-module'};
+        my $config  = $opt->{config};
+
         my $data;
         my $filecontent;
         {
